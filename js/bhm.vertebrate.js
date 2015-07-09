@@ -6,8 +6,8 @@
 
 var BHM = {};
 
-BHM.helpersurl = '/dev/bootstraphelpmanager/bhm.helpers.php';
-BHM.pagesurl = '/dev/bootstraphelpmanager/bhm.pages.php';
+BHM.helpersurl = '/dev/Bootstrap-Help-Manager/bhm.helpers.php';
+BHM.pagesurl = '/dev/Bootstrap-Help-Manager/bhm.pages.php';
 
 BHM.helper = Vertebrate.Model.Extend({
     attributes: {
