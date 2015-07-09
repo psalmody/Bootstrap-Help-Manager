@@ -40,6 +40,16 @@
     <script src="js/bhm.vertebrate.js"></script>
     <script src="js/bhm.console.js"></script>
 
+    <script>
+    $(function() {
+        $('#helpsManager').ManageHelperConsole({
+            ajaxFail: function(xhr) {
+                checkAjaxForNotAuthorized(xhr);
+            }
+        });
+    })
+    </script>
+
 </body>
 
 </html>
