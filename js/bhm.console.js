@@ -282,21 +282,4 @@ function checkAjaxForNotAuthorized(xhr) {
 
 
 }(jQuery));
-
-
-
-
-$(function() {
-
-    $('#helpsManager').ManageHelperConsole({
-        ajaxFail: function(xhr) {
-            checkAjaxForNotAuthorized(xhr);
-        }
-    });
-
-
-
-
-
-})
 // */
