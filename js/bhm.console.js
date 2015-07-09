@@ -1,13 +1,3 @@
-
-
-// */
-
-function checkAjaxForNotAuthorized(xhr) {
-    if (xhr.getResponseHeader('X-AUTH-REQUIRED') == 'true') {
-        window.location.href = "/admin/login.php?return=" + window.location.pathname;
-    }
-}
-
 (function($) {
     $('#helpsManager').on('click','.nav.nav-tabs a',function(e) {
         e.preventDefault()
@@ -282,4 +272,3 @@ function checkAjaxForNotAuthorized(xhr) {
 
 
 }(jQuery));
-// */
