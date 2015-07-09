@@ -2,6 +2,8 @@
 
 Bootstrap-Help-Manager (BHM) uses [VertebrateJS][3] and [jQuery][2] to provide a framework and console for managing help icons and content across an entire site.
 
+On the client side, including [VertebrateJS][3] and `bhm.clientside.min.js` totals around 8k.
+
 The console is provided as a jQuery plugin. It will send ajax requests to the helpers and pages handling scripts to manage the database backend. Two [PHP][4] handlers with a [MySQL][5] database setup have been provided which could be used to provide the necessary functionality. Any other server-side / database method could be created pretty simply.
 
 BHM adds glyphicon help icons to all kinds of HTML elements. When a user clicks the help icon, a bootstrap modal is shown with the help content defined in the console.
@@ -18,17 +20,17 @@ Helpers are defined using [jQuery](1) selectors. The same helper may be applied 
 
 ### Variables
 
-1. Change `templateurl` variable in `js/bhm.helpers.js` to full relative bath to `tempaltes/bhm.helpers.html`
-2. Change `BHM.helpersurl` and `BHM.pagesurl` in `js/bhm.vertebrate.js` to the full relative path for the server-side handler scripts. PHP starter scripts are provided: `bhm.helpers.php` and `bhm.pages.php`. See the section [Server-Side Setup](#serverside) below.
+1. Change `templateurl` variable in `js/bhm.clientside.min.js` to full relative bath to `tempaltes/bhm.helpers.html`
+2. Change `BHM.helpersurl` and `BHM.pagesurl` in `js/bhm.clientside.min.js` to the full relative path for the server-side handler scripts. PHP starter scripts are provided: `bhm.helpers.php` and `bhm.pages.php`. See the section [Server-Side Setup](#serverside) below.
 
 ### Install on Pages in Domain
 
-Very simple. Include:
+Include [jQuery][1], [Bootstrap][2] and:
 
 ```html
-<script src="external/tmpl.js"></script>
-<script src="js/bhm.vertebrate.js"></script>
-<script src="js/bhm.helpers.js"></script>
+<script src="external/vertebratejs/vertebrate.min.js"></script>
+<script src="js/bhm.clientside.js"></script>
+
 ```
 
 ### Customizing Help icons
@@ -50,15 +52,12 @@ Default tables are `bhm_help_pages` and `bhm_help_modals`.
 
 ### Console
 
-Include:
+Include [jQuery][1], [Bootstrap][2] and:
 
 ```html
 <script src="external/ckeditor/ckeditor.js"></script>
-<script src="external/vertebratejs/vertebrate.js"></script>
-<script src="external/tmpl.js"></script>
-<script src="external/JSONTable.js"></script>
-<script src="js/bhm.vertebrate.js"></script>
-<script src="js/bhm.console.js"></script>
+<script src="external/vertebratejs/vertebrate.min.js"></script>
+<script src="js/bhm.allconsole.min.js"></script>
 ```
 
 And initialize the console with the jQuery plugin:
