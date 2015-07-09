@@ -127,7 +127,6 @@
             editHelp(getHelpFor($(this)));
         }).on('click','.saveHelp',function() {
             var help = getHelpFor($(this));
-            debugger;
             help.save();
             markSaved( help );
         }).on('click','.deleteHelp',function() {
@@ -143,13 +142,17 @@
             if (value != $(this).data('value')) markEdited(help);
         }).on('click','#tab_NewPage',function() {
             addNewPage();
-        })
+        }).on('click','ul.nav-tabs a',function(e) {
+            e.preventDefault();
+            if ($(this).prop('id') != 'tab_NewPage') {
+                $(this).tab('show');
+            }
+        });
 
         var ckeditorcount=0;
 
         function addHelp( page ) {
             var newhelp = new BHM.helper({});
-            debugger;
             newhelp.set('id',(Number(BHM.collHelps.max('id'))+1).toString());
             BHM.collHelps.add(newhelp);
             console.log(newhelp.get());
@@ -172,9 +175,7 @@
                 //CKEDITOR.add
 
             }).on('hide.bs.modal',function() {
-                for (instance in CKEDITOR.instances) {
-                    CKEDITOR.instances[instance].destroy();
-                }
+                CKEDITOR.instances['ckeditor'+ckeditorcount].destroy();
                 ckeditorcount++;
             }).on('click','.btn-save-html',function() {
                 var ckid = 'ckeditor'+ckeditorcount;
@@ -225,6 +226,10 @@
 
         function addNewPage() {
             var url = prompt('Copy full url after domain name:');
+            if(!url) {
+                self.find('ul.nav-tabs li:first').click();
+                return false;
+            }
             var newpage = new BHM.page();
             newpage.set('url',url);
             newpage.set('id',Number(BHM.collPages.max('id'))+1);
@@ -272,3 +277,10 @@
 
 
 }(jQuery));
+
+// Prevent bootstrap dialog from blocking focusin - necessary for CKEDITOR
+$(document).on('focusin', function(e) {
+    if ($(e.target).closest(".cke_dialog_body").length) {
+		e.stopImmediatePropagation();
+	}
+});
