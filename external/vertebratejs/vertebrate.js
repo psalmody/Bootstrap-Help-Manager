@@ -273,13 +273,15 @@
         function collection(opts) {
             Vertebrate.Collection.call(this, options);
             var self = this;
-            $.each(opts,function(k,v){
-                if (typeof(v) == 'object') {
-                    $.extend(self[k],v);
-                } else {
-                    self[k] = v;
-                }
-            })
+            if (typeof(opts) != 'undefined') {
+                $.each(opts,function(k,v){
+                    if (typeof(v) == 'object') {
+                        $.extend(self[k],v);
+                    } else {
+                        self[k] = v;
+                    }
+                })
+            }
         }
         collection.prototype = Object.create(Vertebrate.Collection.prototype);
         collection.prototype.constructor = collection;

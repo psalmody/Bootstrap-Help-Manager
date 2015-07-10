@@ -39,5 +39,5 @@ BHM.pages = Vertebrate.Collection.Extend({
 });
 
 
-BHM.collPages = new BHM.pages();
-BHM.collHelps = new BHM.helpers();
+BHM.cp = new BHM.pages();
+BHM.ch = new BHM.helpers();
