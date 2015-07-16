@@ -4,9 +4,7 @@
 *
 */
 
-var BHM = (function(my, Vertebrate, $) {
-
-    var my = {};
+var BHM = (function(Vertebrate, $, my) {
 
     my.helpersurl = '/dev/Bootstrap-Help-Manager/bhm.helpers.php';
     my.pagesurl = '/dev/Bootstrap-Help-Manager/bhm.pages.php';
@@ -45,4 +43,4 @@ var BHM = (function(my, Vertebrate, $) {
     my.ch = new my.helpers();
 
     return my;
-}(BHM || {}, Vertebrate, jQuery));
+}(Vertebrate, jQuery, BHM || {}));
