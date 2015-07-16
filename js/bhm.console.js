@@ -187,66 +187,87 @@
 }(CKEDITOR, jQuery));
 
 
-var BHM = (function(my, Vertebrate, $) {
-    var my = {};
+var BHM = (function(Vertebrate, $, my) {
+    //var my = {};
 
     var clean = function(what) {
         if (typeof(what) != 'string') return what;
         return what.replace(/([.])|([/])|([ ])/g, '');
     }
 
+    var renderPage = function( model ) {
+        var $el = BHM.mc.$el;
+        cleanfilename = clean(model.get('url'));
+        active = typeof(active) != 'undefined' ? active : false;
+        $el.find('ul').append(tmpl($('#templateTabLI').html(),$.extend({},{clean:cleanfilename},model.attributes)));
+
+        $el.find('.tab-content').append(tmpl($('#templateTabDiv').html(),$.extend({},{clean:cleanfilename},model.attributes)));
+
+        if (active) {
+            $('#tab_'+cleanfilename).closest('li').addClass('active');
+            $('#_'+cleanfilename).addClass('active');
+        } else {
+            $el.find('ul li:first').addClass('active');
+            $el.find('.tab-content .tab-pane:first').addClass('active');
+        }
+
+        var tabContent = typeof(cleanfilename) == 'string' ? $('#_'+cleanfilename) : cleanfilename;
+    }
+
+    var renderHelps = function( model ) {
+        var $el = BHM.mc.$el;
+        var tab = $('#_'+clean(model.get('url')));
+        var cols = BHM.mc.settings.columns.slice(0);
+        cols.push(BHM.mc.settings.addButton);
+        var jsondata = [];
+        var helps = BHM.ch.findAll(model.get('id'),'help_page_id');
+        $.each(helps,function() {
+            jsondata.push(this.attributes);
+        });
+
+        $el.find('#_'+clean(model.get('url'))).JSONTable({
+            data: jsondata,
+            template: $('#templateHelperRow'),
+            templateParams: {'filename':model.get('url')},
+            columns: cols,
+            success: function() {
+                $('.helpHTML').hide();
+            }
+        });
+    }
+
+    var renderHelp = function( model ) {
+        var $el = BHM.mc.$el;
+        $('#_'+clean(model.get('filename')))
+            .find('tbody')
+            .prepend(
+                tmpl($('#templateHelperRow').html(),model.get())
+            );
+    }
+
     my.cp = BHM.cp || {};
     my.cp.render = function() {
-        console.log('my.cp.render()');
         var self = this;
         var models = this.models;
         var $el = BHM.mc.$el;
         $el.find('ul').empty();
         $.each(models,function() {
-            cleanfilename = clean(this.get('url'));
-            active = typeof(active) != 'undefined' ? active : false;
-            $el.find('ul').append(tmpl($('#templateTabLI').html(),$.extend({},{clean:cleanfilename},this.attributes)));
-
-            $el.find('.tab-content').append(tmpl($('#templateTabDiv').html(),$.extend({},{clean:cleanfilename},this.attributes)));
-
-            if (active) {
-                $('#tab_'+cleanfilename).closest('li').addClass('active');
-                $('#_'+cleanfilename).addClass('active');
-            } else {
-                $el.find('ul li:first').addClass('active');
-                $el.find('.tab-content .tab-pane:first').addClass('active');
-            }
-
-            var tabContent = typeof(cleanfilename) == 'string' ? $('#_'+cleanfilename) : cleanfilename;
+            renderPage( this );
         })
     }
 
     my.ch = BHM.ch || {};
     my.ch.render = function() {
-        console.log('my.ch.render()');
         var self = this;
         var pages = BHM.cp.models;
         var $el = BHM.mc.$el;
         $.each(pages,function() {
-            var tab = $('#_'+clean(this.get('url')));
-            var cols = BHM.mc.settings.columns.slice(0);
-            cols.push(BHM.mc.settings.addButton);
-            var jsondata = [];
-            var helps = BHM.ch.findAll(this.get('id'),'help_page_id');
-            $.each(helps,function() {
-                jsondata.push(this.attributes);
-            });
-
-            $el.find('#_'+clean(this.get('url'))).JSONTable({
-                data: jsondata,
-                template: $('#templateHelperRow'),
-                templateParams: {'filename':this.get('url')},
-                columns: cols,
-                success: function() {
-                    $('.helpHTML').hide();
-                }
-            });
+            renderHelps( this );
         })
+    }
+
+    my.renderHelp = function(model) {
+        return renderHelp(model);
     }
 
     my.mc = {
@@ -266,9 +287,6 @@ var BHM = (function(my, Vertebrate, $) {
                 $(this).tab('show')
             });
 
-            //setup event binding for view
-            this.bindevents();
-
             //get templates
             var dfd = $.get(self.settings.templates, function(data) {
                 $(data).appendTo('body');
@@ -285,32 +303,12 @@ var BHM = (function(my, Vertebrate, $) {
                 .then(function() {
                     return BHM.ch.fetch()
                 });
-        },
-        getPageFor: function( $obj ) {
-            return BHM.cp.find($obj.closest('.tab-pane').data('page-id'),'id');
-        },
-        getHelpFor: function( $obj ) {
-            return BHM.ch.find($obj.closest('tr').data('help-id'),'id');
-        },
-        bindevents: function() {
-            var self = this;
-            var $el = this.$el;
-            $(document).on('vertebrate:fetched', function(e, c, ms) {
-                //console.log('vertebrate:fetched',c);
-                c.render();
-                if (!$('#tab_NewPage').length) {
-                    var template = tmpl($('#templateTabLI').html(),{clean:'NewPage',url:'New Page'});
-                    $el.find('ul').append(template);
-                }
-            });
-            $el.on('change','input[type="text"]',function() {
+        }
 
-            })
-        },
     }
 
     return my;
-}(BHM || {}, Vertebrate, jQuery));
+}(Vertebrate, jQuery, BHM || {}));
 
 
 
@@ -320,6 +318,71 @@ var BHM = (function(my, Vertebrate, $) {
         mc.settings = $.extend({},mc.settings,opts);
         mc.$el = this;
         mc.render();
+
+
+        var self = this;
+
+
+
+        var getPageFor = function( $obj ) {
+            return BHM.cp.find($obj.closest('.tab-pane').data('page-id'),'id');
+        };
+        var getHelpFor = function( $obj ) {
+            return BHM.ch.find($obj.closest('tr').data('help-id'),'id');
+        };
+        var getElForHelp = function( model ) {
+            return $('#help'+model.get('id'));
+        };
+
+
+        $(document).on('vertebrate:fetched', function(e, c, ms) {
+            c.render();
+            if (!$('#tab_NewPage').length) {
+                var template = tmpl($('#templateTabLI').html(),{clean:'NewPage',url:'New Page'});
+                self.find('ul').append(template);
+            }
+        }).on('vertebrate:changeattr',function(e,m,mattr,mchanged) {
+            getElForHelp(m).find('.saveHelp').addClass('btn-warning');
+        });
+
+        $(this).on('change','input[type="text"]',function() {
+            var model = getHelpFor($(this)),
+                attr = $(this).data('attr'),
+                val = $(this).val();
+            if (val == model.get(attr)) return false;
+            model.set($(this).data('attr'),$(this).val());
+        }).on('click','input[type="checkbox"]',function() {
+            var val = $(this).is(':checked') ? 1 : 0,
+                model = getHelpFor($(this)),
+                old = model.get($(this).data('attr'));
+            if (val == old) return false;
+            model.set($(this).data('attr'),val);
+        }).on('click','.saveHelp',function() {
+            getHelpFor( $(this) ).save();
+            $(this).removeClass('btn-warning');
+        }).on('click','.deleteHelp',function() {
+            var sure = confirm('Are you sure you want to delete this row?');
+            if (!sure) return false;
+            var model = getHelpFor($(this));
+            BHM.ch.remove(model);
+            $.when(model.delete()).done(function() {
+                getElForHelp(model)
+                .fadeOut(300,function() {
+                    $(this).remove();
+                })
+            });
+        }).on('click','.addHelper',function() {
+            var page = getPageFor($(this));
+            var model = new BHM.helper({
+                id: BHM.ch.next('id').toString(),
+                filename: page.get('url'),
+                help_page_id: page.get('id')
+            });
+            BHM.ch.add(model);
+            BHM.renderHelp( model );
+            getElForHelp( model ).find('.saveHelp').addClass('btn-warning');
+        });
+
     }
 }(jQuery));
 
