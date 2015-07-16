@@ -290,6 +290,16 @@ var BHM = (function(Vertebrate, $, my) {
             //get templates
             var dfd = $.get(self.settings.templates, function(data) {
                 $(data).appendTo('body');
+
+                //setup modal dialog
+                CKEDITOR.replace('bhmTextareaEditor');
+                $('#bhmModal').find('.btn-save-html').click(function() {
+                    var modal = $('#bhmModal'),
+                        model = BHM.ch.find(modal.data('helpId'),'id');
+                    model.set('html',CKEDITOR.instances['bhmTextareaEditor'].getData());
+                    CKEDITOR.instances['bhmTextareaEditor'].setData('');
+                    $('#bhmModal').modal('hide');
+                })
             });
 
             //setup tabpanel, then fetch collections
@@ -303,8 +313,8 @@ var BHM = (function(Vertebrate, $, my) {
                 .then(function() {
                     return BHM.ch.fetch()
                 });
-        }
 
+        }
     }
 
     return my;
@@ -381,6 +391,14 @@ var BHM = (function(Vertebrate, $, my) {
             BHM.ch.add(model);
             BHM.renderHelp( model );
             getElForHelp( model ).find('.saveHelp').addClass('btn-warning');
+        }).on('click','.editHelp',function() {
+            var model = getHelpFor($(this));
+            var modal = $('#bhmModal');
+            $('#bhmModalFilename').text(model.get('filename'));
+            $('#bhmModalFieldselecter').text(model.get('field_selecter'));
+            CKEDITOR.instances['bhmTextareaEditor'].setData(model.get('html'));
+            modal.data('helpId',model.get('id'));
+            modal.modal();
         });
 
     }
