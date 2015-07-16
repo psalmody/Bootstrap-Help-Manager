@@ -1,5 +1,5 @@
 <script type="text/template" id="templateHelperRow">
-    <tr id="help<%= id %>" data-id="<%= id %>" data-page-id="<%= filename %>">
+    <tr id="help<%= id %>" data-help-id="<%= id %>" data-page-url="<%= filename %>">
         <td class="form-group">
             <input class="form-control input-sm" type="text" value="<%= field_selecter %>" data-value="<%= field_selecter %>" data-attr="field_selecter">
         </td>
@@ -36,7 +36,7 @@
     <li><a id="tab_<%= clean %>" href="#_<%= clean %>"><%= url %></a></li>
 </script>
 <script type="text/template" id="templateTabDiv">
-    <div class="tab-pane" id="_<%= clean %>" data-url="<%= url %>" data-id="<%= id %>">
+    <div class="tab-pane" id="_<%= clean %>" data-page-url="<%= url %>" data-page-id="<%= id %>">
     </div>
 </script>
 <script type="text/template" id="templateModal">
