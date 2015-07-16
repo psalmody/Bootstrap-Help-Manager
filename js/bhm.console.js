@@ -172,13 +172,168 @@
   };
 })();
 
+
+//setup ckeditor styles
+(function(CKEDITOR, $) {
+    var cssfiles = $(document).find('link[rel="stylesheet"]');
+    var arrcss = ['body{padding:5px;}'];
+    cssfiles.each(function() {
+        arrcss.push($(this).attr('href'));
+    });
+    CKEDITOR.config.contentsCss = arrcss;
+    CKEDITOR.config.height = 500;
+    CKEDITOR.config.htmlEncodeOutput = false;
+    CKEDITOR.config.entities = false;
+}(CKEDITOR, jQuery));
+
+
+var BHM = (function(my, Vertebrate, $) {
+    var my = {};
+
+    var clean = function(what) {
+        if (typeof(what) != 'string') return what;
+        return what.replace(/([.])|([/])|([ ])/g, '');
+    }
+
+    my.cp = BHM.cp || {};
+    my.cp.render = function() {
+        console.log('my.cp.render()');
+        var self = this;
+        var models = this.models;
+        var $el = BHM.mc.$el;
+        $el.find('ul').empty();
+        $.each(models,function() {
+            cleanfilename = clean(this.get('url'));
+            active = typeof(active) != 'undefined' ? active : false;
+            $el.find('ul').append(tmpl($('#templateTabLI').html(),$.extend({},{clean:cleanfilename},this.attributes)));
+
+            $el.find('.tab-content').append(tmpl($('#templateTabDiv').html(),$.extend({},{clean:cleanfilename},this.attributes)));
+
+            if (active) {
+                $('#tab_'+cleanfilename).closest('li').addClass('active');
+                $('#_'+cleanfilename).addClass('active');
+            } else {
+                $el.find('ul li:first').addClass('active');
+                $el.find('.tab-content .tab-pane:first').addClass('active');
+            }
+
+            var tabContent = typeof(cleanfilename) == 'string' ? $('#_'+cleanfilename) : cleanfilename;
+        })
+    }
+
+    my.ch = BHM.ch || {};
+    my.ch.render = function() {
+        console.log('my.ch.render()');
+        var self = this;
+        var pages = BHM.cp.models;
+        var $el = BHM.mc.$el;
+        $.each(pages,function() {
+            var tab = $('#_'+clean(this.get('url')));
+            var cols = BHM.mc.settings.columns.slice(0);
+            cols.push(BHM.mc.settings.addButton);
+            var jsondata = [];
+            var helps = BHM.ch.findAll(this.get('id'),'help_page_id');
+            $.each(helps,function() {
+                jsondata.push(this.attributes);
+            });
+
+            $el.find('#_'+clean(this.get('url'))).JSONTable({
+                data: jsondata,
+                template: $('#templateHelperRow'),
+                templateParams: {'filename':this.get('url')},
+                columns: cols,
+                success: function() {
+                    $('.helpHTML').hide();
+                }
+            });
+        })
+    }
+
+    my.mc = {
+        settings: {
+            addButton: '<button class="btn btn-sm btn-block btn-default addHelper">Add</button>',
+            columns: ['Field Selecter', 'Modal Title', 'Size', 'Content', 'Save'],
+            ajaxFail: false,
+            templates: 'templates/bhm.console.html'
+        },
+        $el: '',
+        callbacks: $.Callbacks(),
+        render: function() {
+            var self = this;
+            //bootstrap tab click functions
+            $('#helpsManager').on('click', '.nav.nav-tabs a', function(e) {
+                e.preventDefault()
+                $(this).tab('show')
+            });
+
+            //setup event binding for view
+            this.bindevents();
+
+            //get templates
+            var dfd = $.get(self.settings.templates, function(data) {
+                $(data).appendTo('body');
+            });
+
+            //setup tabpanel, then fetch collections
+            $.when(dfd)
+                .then(function() {
+                    self.$el.append(tmpl($('#templateTabPanel').html(), {}));
+                })
+                .then(function() {
+                    return BHM.cp.fetch()
+                })
+                .then(function() {
+                    return BHM.ch.fetch()
+                });
+        },
+        getPageFor: function( $obj ) {
+            return BHM.cp.find($obj.closest('.tab-pane').data('page-id'),'id');
+        },
+        getHelpFor: function( $obj ) {
+            return BHM.ch.find($obj.closest('tr').data('help-id'),'id');
+        },
+        bindevents: function() {
+            var self = this;
+            var $el = this.$el;
+            $(document).on('vertebrate:fetched', function(e, c, ms) {
+                //console.log('vertebrate:fetched',c);
+                c.render();
+                if (!$('#tab_NewPage').length) {
+                    var template = tmpl($('#templateTabLI').html(),{clean:'NewPage',url:'New Page'});
+                    $el.find('ul').append(template);
+                }
+            });
+            $el.on('change','input[type="text"]',function() {
+
+            })
+        },
+    }
+
+    return my;
+}(BHM || {}, Vertebrate, jQuery));
+
+
+
+(function($) {
+    $.fn.BHMConsole = function(opts) {
+        var mc = BHM.mc;
+        mc.settings = $.extend({},mc.settings,opts);
+        mc.$el = this;
+        mc.render();
+    }
+}(jQuery));
+
+
+
+/*
+
 (function($) {
     $('#helpsManager').on('click','.nav.nav-tabs a',function(e) {
         e.preventDefault()
         $(this).tab('show')
     })
 
-    $.fn.ManageHelperConsole = function( opts ) {
+    $.fn.BHMConsole = function( opts ) {
         var helpconsole = this;
         var settings = helpconsole.settings;
         var self = this;
@@ -198,26 +353,12 @@
             //setup vertebrate view
             setupVertebrate();
 
-            //setup ckeditor styles
-            var cssfiles = $(document).find('link[rel="stylesheet"]');
-            var arrcss = ['body{padding:5px;}'];
-            cssfiles.each(function() {
-                arrcss.push($(this).attr('href'));
-            });
-            CKEDITOR.config.contentsCss = arrcss;
-            CKEDITOR.config.height = 500;
-            CKEDITOR.config.htmlEncodeOutput = false;
-            CKEDITOR.config.entities = false;
+
         }
 
-        var clean = function( what ) {
-            if (typeof(what) != 'string') return what;
-            return what.replace(/([.])|([/])|([ ])/g,'');
-        }
 
-        var setupTabs = function() {
-            self.append(tmpl($('#templateTabPanel').html(),{}));
-        }
+
+
 
         var addNewTab = function() {
             var template = tmpl($('#templateTabLI').html(),{clean:'NewPage',url:'New Page'});
@@ -246,14 +387,10 @@
             var cols = self.settings.columns.slice(0);
             cols.push(self.settings.addButton);
             var jsondata = [];
-            var helps = BHM.ch.find(page.get('id').toString(),'help_page_id');
-            if ($.isArray(helps)) {
-                $.each(helps,function() {
-                    jsondata.push(this.attributes);
-                });
-            } else {
-                jsondata[0] = helps.attributes;
-            }
+            var helps = BHM.ch.findAll(page.get('id'),'help_page_id');
+            $.each(helps,function() {
+                jsondata.push(this.attributes);
+            });
 
             obj.JSONTable({
                 data: jsondata,
@@ -267,16 +404,7 @@
             return true;
         }
 
-        //make sure templates are loaded
-        var dfd = new $.Deferred;
-        if ($('#templateTermRow').length) {
-            dfd.resolve();
-        } else {
-            $.get(self.settings.templates,function(data) {
-                $(data).appendTo('body');
-                dfd.resolve();
-            })
-        }
+
         //initatiate once templates are loaded
         $.when(dfd).done(function() {
             self._init();
@@ -424,38 +552,18 @@
         function getHelpFor( obj ) {
             var tr = obj.closest('tr'),
                 help = tr.data('id');
-            var arr = BHM.ch.find( help.toString(), 'id' );
-            return arr[0];
+            return BHM.ch.find( help.toString(), 'id' );
         }
 
         function getPageFor( obj ) {
-            var arr = BHM.cp.find(obj.closest('.tab-pane').data('id').toString(),'id');
-            return arr[0];
+            return BHM.cp.find(obj.closest('.tab-pane').data('id').toString(),'id');;
         }
 
         function setupVertebrate() {
 
-            BHM.cp.render = function() {
-                var models = this.models;
-                $.each(models,function() {
-                    makeTab(this);
-                })
-            }
-
-            BHM.ch.render = function() {
-                var page = BHM.cp.find('');
-                //makeTable(tabContent,page);
-            }
-
-            $(document).on('vertebrate:fetched',function(e,c,ms) {
-                c.render();
-                //if (!$('#tab_NewPage').length) addNewTab();
-            })
 
 
 
-            BHM.ch.fetch()
-            BHM.cp.fetch()
         }
 
 
@@ -464,6 +572,9 @@
 
 
 }(jQuery));
+
+
+*/
 
 // Prevent bootstrap dialog from blocking focusin - necessary for CKEDITOR
 $(document).on('focusin', function(e) {
