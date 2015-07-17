@@ -45,8 +45,8 @@
 
 var BHM = (function(Vertebrate, $, my) {
 
-    my.helpersurl = '/dev/Bootstrap-Help-Manager/bhm.helpers.php';
-    my.pagesurl = '/dev/Bootstrap-Help-Manager/bhm.pages.php';
+    my.helpersurl = '/dev/Bootstrap-Help-Manager/src/bhm.helpers.php';
+    my.pagesurl = '/dev/Bootstrap-Help-Manager/src/bhm.pages.php';
 
     my.helper = Vertebrate.Model.Extend({
         attributes: {
@@ -86,7 +86,7 @@ var BHM = (function(Vertebrate, $, my) {
 ;/* Begin bhm.client.js */
 $(function() {
 
-    var templateurl = "/dev/Bootstrap-Help-Manager/templates/bhm.helpers.html";
+    var templateurl = "/dev/Bootstrap-Help-Manager/templates/bhm.client.html";
 
     var promise = BHM.cp.fetch();
 

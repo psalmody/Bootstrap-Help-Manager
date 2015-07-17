@@ -183,8 +183,8 @@
 
 var BHM = (function(Vertebrate, $, my) {
 
-    my.helpersurl = '/dev/Bootstrap-Help-Manager/bhm.helpers.php';
-    my.pagesurl = '/dev/Bootstrap-Help-Manager/bhm.pages.php';
+    my.helpersurl = '/dev/Bootstrap-Help-Manager/src/bhm.helpers.php';
+    my.pagesurl = '/dev/Bootstrap-Help-Manager/src/bhm.pages.php';
 
     my.helper = Vertebrate.Model.Extend({
         attributes: {
@@ -350,7 +350,7 @@ var BHM = (function(Vertebrate, $, my) {
             addButton: '<button class="btn btn-sm btn-block btn-default addHelper">Add</button>',
             columns: ['Field Selecter', 'Modal Title', 'Size', 'Content', 'Save'],
             ajaxFail: false,
-            templates: 'templates/bhm.console.html'
+            templates: '../templates/bhm.console.html'
         },
         $el: '', // jQuery object which the console isn't put in
         render: function() {
@@ -368,7 +368,7 @@ var BHM = (function(Vertebrate, $, my) {
             //setup tabpanel, CKEDITOR in modal when templates are loaded, then fetch collections
             $.when(dfd)
                 .then(function( data ) {
-                    $(data).appendTo('body');
+                    $('body').append(data);
                     CKEDITOR.replace('bhmTextareaEditor');
                     self.$el.append(tmpl($('#templateTabPanel').html(), {}));
                 })

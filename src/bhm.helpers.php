@@ -1,5 +1,5 @@
 <?php
-require('mysql-creds.php');
+require('../mysql-creds.php');
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':

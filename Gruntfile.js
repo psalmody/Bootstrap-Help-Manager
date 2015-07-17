@@ -29,14 +29,6 @@ module.exports = function(grunt) {
             bhmclient: {
                 src: ['src/tmpl.js','src/bhm.vertebrate.js','src/bhm.client.js'],
                 dest: 'build/bhm.client.js'
-            },
-            clienttemplate: {
-                src: ['src/templates/bhm.client.html'],
-                dest: 'build/templates/bhm.client.html'
-            },
-            consoletemplate: {
-                src: ['src/templates/bhm.console.html'],
-                dest: 'build/templates/bhm.console.html'
             }
         },
         watch: {

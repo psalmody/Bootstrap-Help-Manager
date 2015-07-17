@@ -1,7 +1,7 @@
 /* Begin bhm.client.js */
 $(function() {
 
-    var templateurl = "/dev/Bootstrap-Help-Manager/templates/bhm.helpers.html";
+    var templateurl = "/dev/Bootstrap-Help-Manager/templates/bhm.client.html";
 
     var promise = BHM.cp.fetch();
 
