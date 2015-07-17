@@ -12,7 +12,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'POST':
     $data = json_decode($_POST['data']);
-    print_r($data);
     $sql = "INSERT INTO bhm_help_pages(id,url) VALUES('$data->id','$data->url')";
     $result = $db->query($sql) or die(mysqli_error($db));
     echo "added";
