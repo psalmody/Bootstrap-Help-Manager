@@ -43,7 +43,8 @@ var BHM = (function(Vertebrate, $, my) {
 
     return my;
 }(Vertebrate, jQuery, BHM || {}));
-;// Simple JavaScript Templating
+;
+// Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
 var BHM = (function(my){
   var cache = {};
@@ -80,7 +81,8 @@ var BHM = (function(my){
 
   return my;
 })(BHM || {});
-;/*
+;
+/*
 * bhm.client.render.js - render function for client side
 */
 var BHM = (function(Vertebrate, $, my) {
@@ -124,7 +126,8 @@ var BHM = (function(Vertebrate, $, my) {
 
     return my;
 }(Vertebrate, jQuery, BHM || {}));
-;/*
+;
+/*
 * bhm.BHMclient.js - jQuery plugin
 */
 (function($, BHM) {

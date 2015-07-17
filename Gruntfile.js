@@ -19,11 +19,11 @@ module.exports = function(grunt) {
         },
         concat: {
             options: {
-                separator: ';',
+                separator: ';\n',
                 banner: '/**\n*  Bootstrap-Help-Manager v <%= pkg.version %>\n*  <%= pkg.homepage %>\n*/\n',
             },
             bhmconsole: {
-                src: ['src/JSONTable.js', 'src/tmpl.js', 'src/bhm.vertebrate.js', 'src/bhm.console.js'],
+                src: ['src/JSONTable.js', 'src/tmpl.js', 'src/bhm.vertebrate.js', 'src/bhm.console.render.js', 'src/bhm.console.js'],
                 dest: 'build/bhm.console.js'
             },
             bhmclient: {

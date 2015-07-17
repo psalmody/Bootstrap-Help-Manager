@@ -19,12 +19,6 @@
 <body>
 
 
-    <div class="container" role="main">
-        <div class="page-header">
-            <h1>Console :: Bootstrap-Help-Manager</h1>
-        </div>
-    </div>
-
     <div class='container' id="helpsManager">
 
     </div>
@@ -39,7 +33,11 @@
 
     <script>
     $(function() {
-        $('#helpsManager').BHMConsole();
+        $('#helpsManager').BHMConsole({
+            templateurl: "../templates/bhm.console.html",
+            helpersurl: "../src/bhm.helpers.php",
+            pagesurl: "../src/bhm.pages.php"
+        });
     })
     </script>
 

@@ -32,9 +32,9 @@ client templates:
 
 ```JavaScript
 $('body').BHMClient({
-    templateurl: "/dev/Bootstrap-Help-Manager/templates/bhm.client.html",
-    helpersurl: "/dev/Bootstrap-Help-Manager/src/bhm.helpers.php",
-    pagesurl: "/dev/Bootstrap-Help-Manager/src/bhm.pages.php"
+    templateurl: "templates/bhm.client.html",
+    helpersurl: "src/bhm.helpers.php",
+    pagesurl: "src/bhm.pages.php"
 });
 ```
 
@@ -65,11 +65,16 @@ Include [jQuery][1], [Bootstrap][2] and:
 <script src="build/bhm.console.js"></script>
 ```
 
-And initialize the console with the jQuery plugin:
+And initialize the console with the jQuery plugin, defining urls for templates
+and server-side scripts:
 
 ```javascript
 $(function() {
-    $('#helpsManager').BHMConsole();
+    $('#helpsManager').BHMConsole({
+        templateurl: "templates/bhm.console.html",
+        helpersurl: "src/bhm.helpers.php",
+        pagesurl: "src/bhm.pages.php"
+    });
 })
 ```
 

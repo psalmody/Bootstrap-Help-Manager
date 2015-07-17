@@ -115,7 +115,7 @@
             }
             $(data).each(function () {
                 if (settings.template) {
-                    tbody.append(tmpl(settings.template.html(),$.extend(this,settings.templateParams)));
+                    tbody.append(BHM.tmpl(settings.template.html(),$.extend(this,settings.templateParams)));
                     return;
                 }
                 var tr = $('<tr></tr>');
@@ -140,7 +140,8 @@
     }
 
 }(jQuery));
-;// Simple JavaScript Templating
+;
+// Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
 var BHM = (function(my){
   var cache = {};
@@ -177,7 +178,8 @@ var BHM = (function(my){
 
   return my;
 })(BHM || {});
-;/**
+;
+/**
 * bhm.vertebrate.js - define Vertebrate models & collections
 */
 
@@ -218,23 +220,10 @@ var BHM = (function(Vertebrate, $, my) {
 
     return my;
 }(Vertebrate, jQuery, BHM || {}));
-;/* bhm.console.js */
-
-//setup ckeditor styles
-(function(CKEDITOR, $) {
-    //css for CKEDITOR is every stylesheet on this page
-    var cssfiles = $(document).find('link[rel="stylesheet"]');
-    var arrcss = ['body{padding:5px;}'];
-    cssfiles.each(function() {
-        arrcss.push($(this).attr('href'));
-    });
-    CKEDITOR.config.contentsCss = arrcss;
-    CKEDITOR.config.height = 500;
-    CKEDITOR.config.htmlEncodeOutput = false;
-    CKEDITOR.config.entities = false;
-}(CKEDITOR, jQuery));
-
-
+;
+/*
+* bhm.console.render.js render functions for BHM
+*/
 var BHM = (function(Vertebrate, $, my) {
 
     //clean the url for use as DOM id
@@ -248,9 +237,9 @@ var BHM = (function(Vertebrate, $, my) {
         var $el = BHM.mc.$el;
         cleanfilename = clean(model.get('url'));
         //add a tab
-        $el.find('ul').append(tmpl($('#templateTabLI').html(),$.extend({},{clean:cleanfilename},model.attributes)));
+        $el.find('ul').append(BHM.tmpl($('#templateTabLI').html(),$.extend({},{clean:cleanfilename},model.attributes)));
         //add a tab-content div
-        $el.find('.tab-content').append(tmpl($('#templateTabDiv').html(),$.extend({},{clean:cleanfilename},model.attributes)));
+        $el.find('.tab-content').append(BHM.tmpl($('#templateTabDiv').html(),$.extend({},{clean:cleanfilename},model.attributes)));
 
         //first tab gets active
         $el.find('ul li:first').addClass('active');
@@ -300,7 +289,7 @@ var BHM = (function(Vertebrate, $, my) {
         $('#_'+clean(model.get('filename')))
             .find('tbody')
             .prepend(
-                tmpl($('#templateHelperRow').html(),model.get())
+                BHM.tmpl($('#templateHelperRow').html(),model.get())
             );
     }
 
@@ -348,9 +337,9 @@ var BHM = (function(Vertebrate, $, my) {
             addButton: '<button class="btn btn-sm btn-block btn-default addHelper">Add</button>',
             columns: ['Field Selecter', 'Modal Title', 'Size', 'Content', 'Save'],
             ajaxFail: false,
-            templates: '../templates/bhm.console.html',
-            helpersurl: "/dev/Bootstrap-Help-Manager/src/bhm.helpers.php",
-            pagesurl: "/dev/Bootstrap-Help-Manager/src/bhm.pages.php"
+            templateurl: "",
+            helpersurl: "",
+            pagesurl: ""
         },
         $el: '', // jQuery object which the console isn't put in
         render: function() {
@@ -362,18 +351,18 @@ var BHM = (function(Vertebrate, $, my) {
                 $(this).tab('show')
             });
 
-            BHM.helpersurl = this.settings.helpersurl;
-            BHM.pagesurl = this.settings.pagesurl;
+            BHM.ch.url = this.settings.helpersurl;
+            BHM.cp.url = this.settings.pagesurl;
 
             //get templates and setup CKEDITOR in modal
-            var dfd = $.get(self.settings.templates);
+            var dfd = $.get(self.settings.templateurl);
 
             //setup tabpanel, CKEDITOR in modal when templates are loaded, then fetch collections
             $.when(dfd)
                 .then(function( data ) {
                     $('body').append(data);
                     CKEDITOR.replace('bhmTextareaEditor');
-                    self.$el.append(tmpl($('#templateTabPanel').html(), {}));
+                    self.$el.append(BHM.tmpl($('#templateTabPanel').html(), {}));
                 })
                 .then(function() {
                     return BHM.cp.fetch()
@@ -387,6 +376,22 @@ var BHM = (function(Vertebrate, $, my) {
 
     return my;
 }(Vertebrate, jQuery, BHM || {}));
+;
+/* bhm.console.js */
+
+//setup ckeditor styles
+(function(CKEDITOR, $) {
+    //css for CKEDITOR is every stylesheet on this page
+    var cssfiles = $(document).find('link[rel="stylesheet"]');
+    var arrcss = ['body{padding:5px;}'];
+    cssfiles.each(function() {
+        arrcss.push($(this).attr('href'));
+    });
+    CKEDITOR.config.contentsCss = arrcss;
+    CKEDITOR.config.height = 500;
+    CKEDITOR.config.htmlEncodeOutput = false;
+    CKEDITOR.config.entities = false;
+}(CKEDITOR, jQuery));
 
 
 
