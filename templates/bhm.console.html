@@ -25,7 +25,7 @@
     </tr>
 </script>
 <script type="text/template" id="templateTabPanel">
-<div role="tabpanel">
+<div role="tabpanel" style="clear:both;">
     <ul class="nav nav-tabs">
     </ul>
     <div class="tab-content">
@@ -38,6 +38,11 @@
 <script type="text/template" id="templateTabDiv">
     <div class="tab-pane" id="_<%= clean %>" data-page-url="<%= url %>" data-page-id="<%= id %>">
     </div>
+</script>
+<script type="text/template" id="templateOpeningText">
+    <h1>Bootstrap-Help-Manager Console</h1>
+    <button type="button" id="BHMaddPage" class="btn btn-default btn-md pull-right">Add New Page</button>
+    <p>Use this console to edit the sitewide help content.</p>
 </script>
 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="bhmModal">
   <div class="modal-dialog modal-lg">
