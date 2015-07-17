@@ -130,6 +130,8 @@ var BHM = (function(Vertebrate, $, my) {
 
             BHM.ch.url = this.settings.helpersurl;
             BHM.cp.url = this.settings.pagesurl;
+            BHM.helper.prototype.url = this.settings.helpersurl;
+            BHM.page.prototype.url = this.settings.pagesurl;
 
             //get templates and setup CKEDITOR in modal
             var dfd = $.get(self.settings.templateurl);
