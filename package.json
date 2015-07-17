@@ -1,5 +1,5 @@
 {
-  "name": "Bootstrap-Help-Manager",
+  "name": "bootstrap-help-manager",
   "version": "0.3.0",
   "description": "Plugin and management console to create and manage help icons and content across an entire site.",
   "scripts": {
@@ -10,15 +10,19 @@
     "url": "https://github.com/psalmody/Bootstrap-Help-Manager.git"
   },
   "keywords": [
-    "bootstrap",
-    "jquery",
+    "Bootstrap",
+    "jQuery",
+    "jquery-plugin",
     "help",
     "manager",
     "console",
     "sitewide"
   ],
   "author": "Michael A Smith @psalmody",
-  "license": "MIT",
+  "license": {
+      "type": "MIT License",
+      "url": "https://github.com/psalmody/validate-bootstrap.jquery/blob/master/mit-license.md"
+  },
   "bugs": {
     "url": "https://github.com/psalmody/Bootstrap-Help-Manager/issues"
   },
