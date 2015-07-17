@@ -1,4 +1,4 @@
-# Bootstrap-Help-Manager
+# Bootstrap-Help-Manager v 0.2.0
 
 Bootstrap-Help-Manager (BHM) uses [VertebrateJS][3] and [jQuery][2] to provide a framework and console for managing help icons and content across an entire site.
 
@@ -12,7 +12,7 @@ The console features basic adding, deleting of pages and helpers, as well as CKE
 
 Helpers are defined using [jQuery](1) selectors. The same helper may be applied to multiple elements on the page.
 
-## Requirements
+## Requirements & Installation
 
 [jQuery][1], [Bootstrap][2], and [VertebrateJS][3] (included).
 
@@ -29,7 +29,7 @@ Include [jQuery][1], [Bootstrap][2] and:
 
 ```html
 <script src="external/vertebratejs/vertebrate.min.js"></script>
-<script src="js/bhm.clientside.js"></script>
+<script src="js/bhm.helpers.js"></script>
 
 ```
 
@@ -57,19 +57,14 @@ Include [jQuery][1], [Bootstrap][2] and:
 ```html
 <script src="external/ckeditor/ckeditor.js"></script>
 <script src="external/vertebratejs/vertebrate.min.js"></script>
-<script src="js/bhm.allconsole.min.js"></script>
+<script src="js/bhm.console.js"></script>
 ```
 
 And initialize the console with the jQuery plugin:
 
 ```javascript
 $(function() {
-    $('#helpsManager').ManageHelperConsole({
-        ajaxFail: function(xhr) {
-            //optional ajax fail function
-            checkAjaxForNotAuthorized(xhr);
-        }
-    });
+    $('#helpsManager').BHMConsole();
 })
 ```
 
