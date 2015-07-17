@@ -23,11 +23,11 @@ module.exports = function(grunt) {
                 banner: '/**\n*  Bootstrap-Help-Manager v <%= pkg.version %>\n*  <%= pkg.homepage %>\n*/\n',
             },
             bhmconsole: {
-                src: ['external/JSONTable.js', 'external/tmpl.js', 'src/bhm.vertebrate.js', 'src/bhm.console.js'],
+                src: ['src/JSONTable.js', 'src/tmpl.js', 'src/bhm.vertebrate.js', 'src/bhm.console.js'],
                 dest: 'build/bhm.console.js'
             },
             bhmclient: {
-                src: ['external/tmpl.js','src/bhm.vertebrate.js','src/bhm.client.js'],
+                src: ['src/tmpl.js','src/bhm.vertebrate.js','src/bhm.client.js'],
                 dest: 'build/bhm.client.js'
             },
             clienttemplate: {
@@ -38,11 +38,16 @@ module.exports = function(grunt) {
                 src: ['src/templates/bhm.console.html'],
                 dest: 'build/templates/bhm.console.html'
             }
+        },
+        watch: {
+            files: 'src/*',
+            tasks: ['concat','uglify']
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('default', ['concat','uglify']);
 

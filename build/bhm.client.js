@@ -2,105 +2,6 @@
 *  Bootstrap-Help-Manager v 0.2.0
 *  https://github.com/psalmody/Bootstrap-Help-Manager
 */
-/**
-*
-* Define models & collection for Vertebrate.js
-*
-*/
-
-var BHM = (function(Vertebrate, $, my) {
-
-    my.helpersurl = '/dev/Bootstrap-Help-Manager/bhm.helpers.php';
-    my.pagesurl = '/dev/Bootstrap-Help-Manager/bhm.pages.php';
-
-    my.helper = Vertebrate.Model.Extend({
-        attributes: {
-            id: -1,
-            field_selecter: '',
-            title: '',
-            large: false,
-            html: ''
-        },
-        url: my.helpersurl
-    })
-
-    my.page = Vertebrate.Model.Extend({
-        attributes: {
-            "id": -1,
-            "url": ''
-        },
-        url: my.pagesurl
-    });
-
-    my.helpers = Vertebrate.Collection.Extend({
-        model: my.helper,
-        url: my.helpersurl
-    });
-
-    my.pages = Vertebrate.Collection.Extend({
-        model: my.page,
-        url: my.pagesurl
-    });
-
-
-    my.cp = new my.pages();
-    my.ch = new my.helpers();
-
-    return my;
-}(Vertebrate, jQuery, BHM || {}));
-;/**
-*  Bootstrap-Help-Manager v 0.2.0
-*  https://github.com/psalmody/Bootstrap-Help-Manager
-*/
-
-
-/**
-*
-* Define models & collection for Vertebrate.js
-*
-*/
-
-var BHM = (function(Vertebrate, $, my) {
-
-    my.helpersurl = '/dev/Bootstrap-Help-Manager/bhm.helpers.php';
-    my.pagesurl = '/dev/Bootstrap-Help-Manager/bhm.pages.php';
-
-    my.helper = Vertebrate.Model.Extend({
-        attributes: {
-            id: -1,
-            field_selecter: '',
-            title: '',
-            large: false,
-            html: ''
-        },
-        url: my.helpersurl
-    })
-
-    my.page = Vertebrate.Model.Extend({
-        attributes: {
-            "id": -1,
-            "url": ''
-        },
-        url: my.pagesurl
-    });
-
-    my.helpers = Vertebrate.Collection.Extend({
-        model: my.helper,
-        url: my.helpersurl
-    });
-
-    my.pages = Vertebrate.Collection.Extend({
-        model: my.page,
-        url: my.pagesurl
-    });
-
-
-    my.cp = new my.pages();
-    my.ch = new my.helpers();
-
-    return my;
-}(Vertebrate, jQuery, BHM || {}));
-
 // Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
 (function(){
@@ -136,9 +37,53 @@ var BHM = (function(Vertebrate, $, my) {
     return data ? fn( data ) : fn;
   };
 })();
+;/**
+* begin bhm.vertebrate.js
+* Define models & collection for Vertebrate.js
+*
+*/
+
+var BHM = (function(Vertebrate, $, my) {
+
+    my.helpersurl = '/dev/Bootstrap-Help-Manager/bhm.helpers.php';
+    my.pagesurl = '/dev/Bootstrap-Help-Manager/bhm.pages.php';
+
+    my.helper = Vertebrate.Model.Extend({
+        attributes: {
+            id: -1,
+            field_selecter: '',
+            title: '',
+            large: false,
+            html: ''
+        },
+        url: my.helpersurl
+    })
+
+    my.page = Vertebrate.Model.Extend({
+        attributes: {
+            "id": -1,
+            "url": ''
+        },
+        url: my.pagesurl
+    });
+
+    my.helpers = Vertebrate.Collection.Extend({
+        model: my.helper,
+        url: my.helpersurl
+    });
+
+    my.pages = Vertebrate.Collection.Extend({
+        model: my.page,
+        url: my.pagesurl
+    });
 
 
+    my.cp = new my.pages();
+    my.ch = new my.helpers();
 
+    return my;
+}(Vertebrate, jQuery, BHM || {}));
+;/* Begin bhm.client.js */
 $(function() {
 
     var templateurl = "/dev/Bootstrap-Help-Manager/templates/bhm.helpers.html";

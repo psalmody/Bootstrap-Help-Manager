@@ -1,4 +1,4 @@
-
+/* Begin bhm.console.js */
 //setup ckeditor styles
 (function(CKEDITOR, $) {
     //css for CKEDITOR is every stylesheet on this page

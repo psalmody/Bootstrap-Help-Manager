@@ -1,5 +1,5 @@
 /**
-*
+* begin bhm.vertebrate.js
 * Define models & collection for Vertebrate.js
 *
 */
