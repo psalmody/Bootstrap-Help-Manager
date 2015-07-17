@@ -1,4 +1,6 @@
-;
+/**
+* JSONTable plugin - takes jsondata or url and converts to bootstrap table
+*/
 (function ($) {
 
     $.fn.JSONTable = function (options) {

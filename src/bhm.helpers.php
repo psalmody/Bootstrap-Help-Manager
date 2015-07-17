@@ -1,5 +1,5 @@
 <?php
-require('mysql-creds.php');
+require('../mysql-creds.php');
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
@@ -22,7 +22,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
     $sql = "INSERT INTO
                 bhm_help_modals (id,help_page_id,field_selecter,title,large,html)
             VALUES ('$data->id',
-                    (SELECT id FROM bhm_help_pages WHERE url='$data->filename'),
+                    '$data->help_page_id',
                     '$data->field_selecter',
                     '$data->title',
                     '$data->large',

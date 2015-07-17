@@ -1,8 +1,7 @@
 {
   "name": "Bootstrap-Help-Manager",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Plugin and management console to create and manage help icons and content across an entire site.",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

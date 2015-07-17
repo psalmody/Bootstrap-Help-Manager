@@ -1,4 +1,4 @@
-# Bootstrap-Help-Manager v 0.2.0
+# Bootstrap-Help-Manager v 0.2.1
 
 Bootstrap-Help-Manager (BHM) uses [VertebrateJS][3] and [jQuery][2] to provide a framework and console for managing help icons and content across an entire site.
 
@@ -20,8 +20,8 @@ Helpers are defined using [jQuery](1) selectors. The same helper may be applied 
 
 ### Variables
 
-1. Change `templateurl` variable in `js/bhm.clientside.min.js` to full relative bath to `tempaltes/bhm.helpers.html`
-2. Change `BHM.helpersurl` and `BHM.pagesurl` in `js/bhm.clientside.min.js` to the full relative path for the server-side handler scripts. PHP starter scripts are provided: `bhm.helpers.php` and `bhm.pages.php`. See the section [Server-Side Setup](#serverside) below.
+1. Change `templateurl` variable in `build/bhm.client.min.js` to full relative bath to `templates/bhm.helpers.html`
+2. Change `BHM.helpersurl` and `BHM.pagesurl` in `build/bhm.client.min.js` to the full relative path for the server-side handler scripts. PHP starter scripts are provided: `bhm.helpers.php` and `bhm.pages.php`. See the section [Server-Side Setup](#serverside) below.
 
 ### Install on Pages in Domain
 
@@ -29,7 +29,7 @@ Include [jQuery][1], [Bootstrap][2] and:
 
 ```html
 <script src="external/vertebratejs/vertebrate.min.js"></script>
-<script src="js/bhm.helpers.js"></script>
+<script src="build/bhm.client.js"></script>
 
 ```
 
@@ -57,7 +57,7 @@ Include [jQuery][1], [Bootstrap][2] and:
 ```html
 <script src="external/ckeditor/ckeditor.js"></script>
 <script src="external/vertebratejs/vertebrate.min.js"></script>
-<script src="js/bhm.console.js"></script>
+<script src="build/bhm.console.js"></script>
 ```
 
 And initialize the console with the jQuery plugin:
