@@ -1,4 +1,4 @@
-# Bootstrap-Help-Manager v 0.2.1
+# Bootstrap-Help-Manager v 0.3.0
 
 Bootstrap-Help-Manager (BHM) uses [VertebrateJS][3] and [jQuery][2] to provide a framework and console for managing help icons and content across an entire site.
 
