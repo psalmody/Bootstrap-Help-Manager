@@ -34,24 +34,12 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="external/ckeditor/ckeditor.js"></script>
-    <script src="external/vertebratejs/vertebrate.js"></script>
-    <script src="external/tmpl.js"></script>
-    <script src="external/JSONTable.js"></script>
-    <script src="js/bhm.vertebrate.js"></script>
+    <script src="external/vertebratejs/vertebrate.min.js"></script>
     <script src="js/bhm.console.js"></script>
 
     <script>
-    function checkAjaxForNotAuthorized(xhr) {
-        if (xhr.getResponseHeader('X-AUTH-REQUIRED') == 'true') {
-            window.location.href = "/admin/login.php?return=" + window.location.pathname;
-        }
-    }
     $(function() {
-        $('#helpsManager').ManageHelperConsole({
-            ajaxFail: function(xhr) {
-                checkAjaxForNotAuthorized(xhr);
-            }
-        });
+        $('#helpsManager').BHMConsole();
     })
     </script>
 

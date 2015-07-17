@@ -4,40 +4,43 @@
 *
 */
 
-var BHM = {};
+var BHM = (function(Vertebrate, $, my) {
 
-BHM.helpersurl = '/dev/Bootstrap-Help-Manager/bhm.helpers.php';
-BHM.pagesurl = '/dev/Bootstrap-Help-Manager/bhm.pages.php';
+    my.helpersurl = '/dev/Bootstrap-Help-Manager/bhm.helpers.php';
+    my.pagesurl = '/dev/Bootstrap-Help-Manager/bhm.pages.php';
 
-BHM.helper = Vertebrate.Model.Extend({
-    attributes: {
-        id: -1,
-        field_selecter: '',
-        title: '',
-        large: false,
-        html: ''
-    },
-    url: BHM.helpersurl
-})
+    my.helper = Vertebrate.Model.Extend({
+        attributes: {
+            id: -1,
+            field_selecter: '',
+            title: '',
+            large: false,
+            html: ''
+        },
+        url: my.helpersurl
+    })
 
-BHM.page = Vertebrate.Model.Extend({
-    attributes: {
-        "id": -1,
-        "url": ''
-    },
-    url: BHM.pagesurl
-});
+    my.page = Vertebrate.Model.Extend({
+        attributes: {
+            "id": -1,
+            "url": ''
+        },
+        url: my.pagesurl
+    });
 
-BHM.helpers = Vertebrate.Collection.Extend({
-    model: BHM.helper,
-    url: BHM.helpersurl
-});
+    my.helpers = Vertebrate.Collection.Extend({
+        model: my.helper,
+        url: my.helpersurl
+    });
 
-BHM.pages = Vertebrate.Collection.Extend({
-    model: BHM.page,
-    url: BHM.pagesurl
-});
+    my.pages = Vertebrate.Collection.Extend({
+        model: my.page,
+        url: my.pagesurl
+    });
 
 
-BHM.collPages = new BHM.pages();
-BHM.collHelps = new BHM.helpers();
+    my.cp = new my.pages();
+    my.ch = new my.helpers();
+
+    return my;
+}(Vertebrate, jQuery, BHM || {}));
