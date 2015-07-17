@@ -1,9 +1,9 @@
 // Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
-(function(){
+var BHM = (function(my){
   var cache = {};
 
-  this.tmpl = function tmpl(str, data){
+  my.tmpl = function tmpl(str, data){
     // Figure out if we're getting a template, or if we need to
     // load the template - and be sure to cache the result.
     var fn = !/\W/.test(str) ?
@@ -32,4 +32,6 @@
     // Provide some basic currying to the user
     return data ? fn( data ) : fn;
   };
-})();
+
+  return my;
+})(BHM || {});

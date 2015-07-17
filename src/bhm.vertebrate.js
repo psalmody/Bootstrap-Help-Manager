@@ -1,13 +1,8 @@
 /**
-* begin bhm.vertebrate.js
-* Define models & collection for Vertebrate.js
-*
+* bhm.vertebrate.js - define Vertebrate models & collections
 */
 
 var BHM = (function(Vertebrate, $, my) {
-
-    my.helpersurl = '/dev/Bootstrap-Help-Manager/src/bhm.helpers.php';
-    my.pagesurl = '/dev/Bootstrap-Help-Manager/src/bhm.pages.php';
 
     my.helper = Vertebrate.Model.Extend({
         attributes: {
@@ -17,7 +12,7 @@ var BHM = (function(Vertebrate, $, my) {
             large: false,
             html: ''
         },
-        url: my.helpersurl
+        /*url: BHM.helpersurl*/
     })
 
     my.page = Vertebrate.Model.Extend({
@@ -25,17 +20,17 @@ var BHM = (function(Vertebrate, $, my) {
             "id": -1,
             "url": ''
         },
-        url: my.pagesurl
+        /*url: BHM.pagesurl*/
     });
 
     my.helpers = Vertebrate.Collection.Extend({
         model: my.helper,
-        url: my.helpersurl
+        /*url: BHM.helpersurl*/
     });
 
     my.pages = Vertebrate.Collection.Extend({
         model: my.page,
-        url: my.pagesurl
+        /*url: BHM.pagesurl*/
     });
 
 

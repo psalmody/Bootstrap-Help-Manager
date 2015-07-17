@@ -1,4 +1,4 @@
-# Bootstrap-Help-Manager v 0.2.1
+# Bootstrap-Help-Manager v 0.3.0
 
 Bootstrap-Help-Manager (BHM) uses [VertebrateJS][3] and [jQuery][2] to provide a framework and console for managing help icons and content across an entire site.
 
@@ -18,11 +18,6 @@ Helpers are defined using [jQuery](1) selectors. The same helper may be applied 
 
 ## Client-Side Setup
 
-### Variables
-
-1. Change `templateurl` variable in `build/bhm.client.min.js` to full relative bath to `templates/bhm.helpers.html`
-2. Change `BHM.helpersurl` and `BHM.pagesurl` in `build/bhm.client.min.js` to the full relative path for the server-side handler scripts. PHP starter scripts are provided: `bhm.helpers.php` and `bhm.pages.php`. See the section [Server-Side Setup](#serverside) below.
-
 ### Install on Pages in Domain
 
 Include [jQuery][1], [Bootstrap][2] and:
@@ -30,7 +25,17 @@ Include [jQuery][1], [Bootstrap][2] and:
 ```html
 <script src="external/vertebratejs/vertebrate.min.js"></script>
 <script src="build/bhm.client.js"></script>
+```
 
+Initialize [jQuery][1] plugin with proper urls for server-side scripts and
+client templates:
+
+```JavaScript
+$('body').BHMClient({
+    templateurl: "templates/bhm.client.html",
+    helpersurl: "src/bhm.helpers.php",
+    pagesurl: "src/bhm.pages.php"
+});
 ```
 
 ### Customizing Help icons
@@ -60,11 +65,16 @@ Include [jQuery][1], [Bootstrap][2] and:
 <script src="build/bhm.console.js"></script>
 ```
 
-And initialize the console with the jQuery plugin:
+And initialize the console with the jQuery plugin, defining urls for templates
+and server-side scripts:
 
 ```javascript
 $(function() {
-    $('#helpsManager').BHMConsole();
+    $('#helpsManager').BHMConsole({
+        templateurl: "templates/bhm.console.html",
+        helpersurl: "src/bhm.helpers.php",
+        pagesurl: "src/bhm.pages.php"
+    });
 })
 ```
 

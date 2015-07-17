@@ -111,7 +111,7 @@
             }
             $(data).each(function () {
                 if (settings.template) {
-                    tbody.append(tmpl(settings.template.html(),$.extend(this,settings.templateParams)));
+                    tbody.append(BHM.tmpl(settings.template.html(),$.extend(this,settings.templateParams)));
                     return;
                 }
                 var tr = $('<tr></tr>');

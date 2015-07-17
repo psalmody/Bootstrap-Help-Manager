@@ -1,13 +1,55 @@
 /**
-*  Bootstrap-Help-Manager v 0.2.1
+*  Bootstrap-Help-Manager v 0.3.0
 *  https://github.com/psalmody/Bootstrap-Help-Manager
 */
+/**
+* bhm.vertebrate.js - define Vertebrate models & collections
+*/
+
+var BHM = (function(Vertebrate, $, my) {
+
+    my.helper = Vertebrate.Model.Extend({
+        attributes: {
+            id: -1,
+            field_selecter: '',
+            title: '',
+            large: false,
+            html: ''
+        },
+        /*url: BHM.helpersurl*/
+    })
+
+    my.page = Vertebrate.Model.Extend({
+        attributes: {
+            "id": -1,
+            "url": ''
+        },
+        /*url: BHM.pagesurl*/
+    });
+
+    my.helpers = Vertebrate.Collection.Extend({
+        model: my.helper,
+        /*url: BHM.helpersurl*/
+    });
+
+    my.pages = Vertebrate.Collection.Extend({
+        model: my.page,
+        /*url: BHM.pagesurl*/
+    });
+
+
+    my.cp = new my.pages();
+    my.ch = new my.helpers();
+
+    return my;
+}(Vertebrate, jQuery, BHM || {}));
+;
 // Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
-(function(){
+var BHM = (function(my){
   var cache = {};
 
-  this.tmpl = function tmpl(str, data){
+  my.tmpl = function tmpl(str, data){
     // Figure out if we're getting a template, or if we need to
     // load the template - and be sure to cache the result.
     var fn = !/\W/.test(str) ?
@@ -36,78 +78,16 @@
     // Provide some basic currying to the user
     return data ? fn( data ) : fn;
   };
-})();
-;/**
-* begin bhm.vertebrate.js
-* Define models & collection for Vertebrate.js
-*
+
+  return my;
+})(BHM || {});
+;
+/*
+* bhm.client.render.js - render function for client side
 */
-
 var BHM = (function(Vertebrate, $, my) {
-
-    my.helpersurl = '/dev/Bootstrap-Help-Manager/src/bhm.helpers.php';
-    my.pagesurl = '/dev/Bootstrap-Help-Manager/src/bhm.pages.php';
-
-    my.helper = Vertebrate.Model.Extend({
-        attributes: {
-            id: -1,
-            field_selecter: '',
-            title: '',
-            large: false,
-            html: ''
-        },
-        url: my.helpersurl
-    })
-
-    my.page = Vertebrate.Model.Extend({
-        attributes: {
-            "id": -1,
-            "url": ''
-        },
-        url: my.pagesurl
-    });
-
-    my.helpers = Vertebrate.Collection.Extend({
-        model: my.helper,
-        url: my.helpersurl
-    });
-
-    my.pages = Vertebrate.Collection.Extend({
-        model: my.page,
-        url: my.pagesurl
-    });
-
-
-    my.cp = new my.pages();
-    my.ch = new my.helpers();
-
-    return my;
-}(Vertebrate, jQuery, BHM || {}));
-;/* Begin bhm.client.js */
-$(function() {
-
-    var templateurl = "/dev/Bootstrap-Help-Manager/templates/bhm.client.html";
-
-    var promise = BHM.cp.fetch();
-
-    $.when(promise).done(function() {
-        var page = BHM.cp.find(window.location.pathname,'url');
-
-        if (!page) return false;
-
-        var pageID = page.get('id');
-
-        BHM.ch.set('page_id',pageID);
-
-        BHM.ch.fetch(function() {
-            $.get(templateurl,function(data) {
-                $('body').append(data);
-                BHM.ch.render();
-            })
-        });
-    });
-
-    BHM.ch.render = function() {
+    my.ch = BHM.ch || {};
+    my.ch.render = function() {
         var coll = this;
         $.each(coll.models,function() {
             var a = this.get();
@@ -118,41 +98,82 @@ $(function() {
                 case 'BUTTON':
                     var btngroup = $('<div></div>',{"class":"btn-group"});
                     el.wrap(btngroup);
-                    el.closest('.btn-group').append(tmpl($('#templateBHMButtonGroup').html(),{"id":a.id}));
+                    el.closest('.btn-group').append(BHM.tmpl($('#templateBHMButtonGroup').html(),{"id":a.id}));
                     if (el.hasClass('btn-block')) {
                         el.removeClass('btn-block');
                     }
                 break;
                 case 'INPUT':
                     el.wrap(inputgroup);
-                    el.closest('.input-group').append(tmpl($('#templateBHMInputGroup').html(),{"id":a.id}));
+                    el.closest('.input-group').append(BHM.tmpl($('#templateBHMInputGroup').html(),{"id":a.id}));
                 break;
                 case 'SELECT':
                     el.wrap(inputgroup);
-                    el.after(tmpl($('#templateBHMInputGroup').html(),{"id":a.id}));
+                    el.after(BHM.tmpl($('#templateBHMInputGroup').html(),{"id":a.id}));
                 break;
                 case 'TEXTAREA':
                     if (el.closest('.form-group').find('label').length) {
-                        el.closest('.form-group').find('label').append(tmpl($('#templateBHMHelper').html(),{"id":a.id}));
+                        el.closest('.form-group').find('label').append(BHM.tmpl($('#templateBHMHelper').html(),{"id":a.id}));
                     } else {
-                        el.closest('.form-group').prepend(tmpl($('#templateBHMHelper').html(),{"id":a.id}));
+                        el.closest('.form-group').prepend(BHM.tmpl($('#templateBHMHelper').html(),{"id":a.id}));
                     }
                 break;
                 default:
-                    el.append(tmpl($('#templateBHMHelper').html(),{"id":a.id}));
+                    el.append(BHM.tmpl($('#templateBHMHelper').html(),{"id":a.id}));
             }
         });
     }
 
-    $('body').on('click','.bhm-helper',function() {
-        var id = $(this).data('bhm-helper');
-        var help = BHM.ch.find(id,'id');
-        var islarge = help.get('large')=='1' ? 'modal-lg' : '';
-        var modal = $(tmpl($('#templateBHMModal').html(),{title:help.get('title'),html:help.get('html'),large:islarge}));
-        modal.modal().on('hidden.bs.modal',function() {
-            modal.remove();
-        })
-    })
+    return my;
+}(Vertebrate, jQuery, BHM || {}));
+;
+/*
+* bhm.BHMclient.js - jQuery plugin
+*/
+(function($, BHM) {
+
+    $.fn.BHMClient = function( options ) {
+        this.settings = $.extend({},{
+            templateurl: "",
+            helpersurl: "",
+            pagesurl: ""
+        },options);
+
+        BHM.ch.url = this.settings.helpersurl;
+        BHM.cp.url = this.settings.pagesurl;
+
+        var self = this;
+
+        var promise = BHM.cp.fetch();
+
+        $.when(promise).done(function() {
+            var page = BHM.cp.find(window.location.pathname,'url');
+
+            if (!page) return false;
+
+            var pageID = page.get('id');
+
+            BHM.ch.set('page_id',pageID);
+
+            BHM.ch.fetch(function() {
+                $.get(self.settings.templateurl,function(data) {
+                    $('body').append(data);
+                    BHM.ch.render();
+                })
+            });
+        });
+
+        $('body').on('click','.bhm-helper',function() {
+            var id = $(this).data('bhm-helper');
+            var help = BHM.ch.find(id,'id');
+            var islarge = help.get('large')=='1' ? 'modal-lg' : '';
+            var modal = $(BHM.tmpl($('#templateBHMModal').html(),{title:help.get('title'),html:help.get('html'),large:islarge}));
+            modal.modal().on('hidden.bs.modal',function() {
+                modal.remove();
+            })
+        });
+
+    }
 
 
-})
+}(jQuery, BHM));

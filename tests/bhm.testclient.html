@@ -96,6 +96,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="../external/vertebratejs/vertebrate.min.js"></script>
     <script src="../build/bhm.client.min.js"></script>
+    <script>
+    $('body').BHMClient({
+        templateurl: "../templates/bhm.client.html",
+        helpersurl: "../src/bhm.helpers.php",
+        pagesurl: "../src/bhm.pages.php"
+    });
+    </script>
 
 </body>
 
