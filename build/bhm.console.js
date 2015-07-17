@@ -142,10 +142,10 @@
 }(jQuery));
 ;// Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
-(function(){
+var BHM = (function(my){
   var cache = {};
 
-  this.tmpl = function tmpl(str, data){
+  my.tmpl = function tmpl(str, data){
     // Figure out if we're getting a template, or if we need to
     // load the template - and be sure to cache the result.
     var fn = !/\W/.test(str) ?
@@ -174,17 +174,14 @@
     // Provide some basic currying to the user
     return data ? fn( data ) : fn;
   };
-})();
+
+  return my;
+})(BHM || {});
 ;/**
-* begin bhm.vertebrate.js
-* Define models & collection for Vertebrate.js
-*
+* bhm.vertebrate.js - define Vertebrate models & collections
 */
 
 var BHM = (function(Vertebrate, $, my) {
-
-    my.helpersurl = '/dev/Bootstrap-Help-Manager/src/bhm.helpers.php';
-    my.pagesurl = '/dev/Bootstrap-Help-Manager/src/bhm.pages.php';
 
     my.helper = Vertebrate.Model.Extend({
         attributes: {
@@ -194,7 +191,7 @@ var BHM = (function(Vertebrate, $, my) {
             large: false,
             html: ''
         },
-        url: my.helpersurl
+        /*url: BHM.helpersurl*/
     })
 
     my.page = Vertebrate.Model.Extend({
@@ -202,17 +199,17 @@ var BHM = (function(Vertebrate, $, my) {
             "id": -1,
             "url": ''
         },
-        url: my.pagesurl
+        /*url: BHM.pagesurl*/
     });
 
     my.helpers = Vertebrate.Collection.Extend({
         model: my.helper,
-        url: my.helpersurl
+        /*url: BHM.helpersurl*/
     });
 
     my.pages = Vertebrate.Collection.Extend({
         model: my.page,
-        url: my.pagesurl
+        /*url: BHM.pagesurl*/
     });
 
 
@@ -221,7 +218,8 @@ var BHM = (function(Vertebrate, $, my) {
 
     return my;
 }(Vertebrate, jQuery, BHM || {}));
-;/* Begin bhm.console.js */
+;/* bhm.console.js */
+
 //setup ckeditor styles
 (function(CKEDITOR, $) {
     //css for CKEDITOR is every stylesheet on this page
@@ -350,7 +348,9 @@ var BHM = (function(Vertebrate, $, my) {
             addButton: '<button class="btn btn-sm btn-block btn-default addHelper">Add</button>',
             columns: ['Field Selecter', 'Modal Title', 'Size', 'Content', 'Save'],
             ajaxFail: false,
-            templates: '../templates/bhm.console.html'
+            templates: '../templates/bhm.console.html',
+            helpersurl: "/dev/Bootstrap-Help-Manager/src/bhm.helpers.php",
+            pagesurl: "/dev/Bootstrap-Help-Manager/src/bhm.pages.php"
         },
         $el: '', // jQuery object which the console isn't put in
         render: function() {
@@ -361,6 +361,9 @@ var BHM = (function(Vertebrate, $, my) {
                 e.preventDefault()
                 $(this).tab('show')
             });
+
+            BHM.helpersurl = this.settings.helpersurl;
+            BHM.pagesurl = this.settings.pagesurl;
 
             //get templates and setup CKEDITOR in modal
             var dfd = $.get(self.settings.templates);
@@ -389,6 +392,7 @@ var BHM = (function(Vertebrate, $, my) {
 
 (function($) {
     $.fn.BHMConsole = function(opts) {
+
         var mc = BHM.mc;
         mc.settings = $.extend({},mc.settings,opts);
         mc.$el = this;

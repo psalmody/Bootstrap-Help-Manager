@@ -1,4 +1,5 @@
-/* Begin bhm.console.js */
+/* bhm.console.js */
+
 //setup ckeditor styles
 (function(CKEDITOR, $) {
     //css for CKEDITOR is every stylesheet on this page
@@ -127,7 +128,9 @@ var BHM = (function(Vertebrate, $, my) {
             addButton: '<button class="btn btn-sm btn-block btn-default addHelper">Add</button>',
             columns: ['Field Selecter', 'Modal Title', 'Size', 'Content', 'Save'],
             ajaxFail: false,
-            templates: '../templates/bhm.console.html'
+            templates: '../templates/bhm.console.html',
+            helpersurl: "/dev/Bootstrap-Help-Manager/src/bhm.helpers.php",
+            pagesurl: "/dev/Bootstrap-Help-Manager/src/bhm.pages.php"
         },
         $el: '', // jQuery object which the console isn't put in
         render: function() {
@@ -138,6 +141,9 @@ var BHM = (function(Vertebrate, $, my) {
                 e.preventDefault()
                 $(this).tab('show')
             });
+
+            BHM.helpersurl = this.settings.helpersurl;
+            BHM.pagesurl = this.settings.pagesurl;
 
             //get templates and setup CKEDITOR in modal
             var dfd = $.get(self.settings.templates);
@@ -166,6 +172,7 @@ var BHM = (function(Vertebrate, $, my) {
 
 (function($) {
     $.fn.BHMConsole = function(opts) {
+
         var mc = BHM.mc;
         mc.settings = $.extend({},mc.settings,opts);
         mc.$el = this;

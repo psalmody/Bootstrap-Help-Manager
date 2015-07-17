@@ -18,11 +18,6 @@ Helpers are defined using [jQuery](1) selectors. The same helper may be applied 
 
 ## Client-Side Setup
 
-### Variables
-
-1. Change `templateurl` variable in `build/bhm.client.min.js` to full relative bath to `templates/bhm.helpers.html`
-2. Change `BHM.helpersurl` and `BHM.pagesurl` in `build/bhm.client.min.js` to the full relative path for the server-side handler scripts. PHP starter scripts are provided: `bhm.helpers.php` and `bhm.pages.php`. See the section [Server-Side Setup](#serverside) below.
-
 ### Install on Pages in Domain
 
 Include [jQuery][1], [Bootstrap][2] and:
@@ -30,7 +25,17 @@ Include [jQuery][1], [Bootstrap][2] and:
 ```html
 <script src="external/vertebratejs/vertebrate.min.js"></script>
 <script src="build/bhm.client.js"></script>
+```
 
+Initialize [jQuery][1] plugin with proper urls for server-side scripts and
+client templates:
+
+```JavaScript
+$('body').BHMClient({
+    templateurl: "/dev/Bootstrap-Help-Manager/templates/bhm.client.html",
+    helpersurl: "/dev/Bootstrap-Help-Manager/src/bhm.helpers.php",
+    pagesurl: "/dev/Bootstrap-Help-Manager/src/bhm.pages.php"
+});
 ```
 
 ### Customizing Help icons

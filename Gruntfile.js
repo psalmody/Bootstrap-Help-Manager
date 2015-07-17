@@ -27,7 +27,7 @@ module.exports = function(grunt) {
                 dest: 'build/bhm.console.js'
             },
             bhmclient: {
-                src: ['src/tmpl.js','src/bhm.vertebrate.js','src/bhm.client.js'],
+                src: ['src/bhm.vertebrate.js','src/tmpl.js','src/bhm.client.render.js','src/bhm.BHMclient.js'],
                 dest: 'build/bhm.client.js'
             }
         },

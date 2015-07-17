@@ -95,7 +95,14 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="../external/vertebratejs/vertebrate.min.js"></script>
-    <script src="../build/bhm.client.min.js"></script>
+    <script src="../build/bhm.client.js"></script>
+    <script>
+    $('body').BHMClient({
+        templateurl: "/dev/Bootstrap-Help-Manager/templates/bhm.client.html",
+        helpersurl: "/dev/Bootstrap-Help-Manager/src/bhm.helpers.php",
+        pagesurl: "/dev/Bootstrap-Help-Manager/src/bhm.pages.php"
+    });
+    </script>
 
 </body>
 
