@@ -11,15 +11,16 @@ switch ($_SERVER['REQUEST_METHOD']) {
     break;
 
     case 'POST':
-    $data = json_decode($_POST['data']);
-    $sql = "INSERT INTO bhm_help_pages(id,url) VALUES('$data->id','$data->url')";
+    $data = $_POST['model'];
+    $sql = "INSERT INTO bhm_help_pages(id,url) VALUES('$data[id]','$data[url]')";
     $result = $db->query($sql) or die(mysqli_error($db));
     echo "added";
     break;
 
     case 'DELETE':
-    $data = json_decode(file_get_contents("php://input"));
-    $sql = "DELETE FROM bhm_help_pages WHERE id='$data->id'";
+    parse_str(urldecode(file_get_contents("php://input")),$data);
+    $model = $data['model'];
+    $sql = "DELETE FROM bhm_help_pages WHERE id=$model[id]";
     $res = $db->query($sql) or die(mysqli_error($db));
     echo 'deleted';
     break;
