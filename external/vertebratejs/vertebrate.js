@@ -1,8 +1,7 @@
 /**
-* Vertebrate.js 0.2.2
-* https://github.com/psalmody/vertebratejs
+*  Vertebrate.js 0.3.0
+*  https://github.com/psalmody/vertebratejs
 */
-
 var Vertebrate = (function($) {
 
     if (typeof($) == 'undefined') {
@@ -66,7 +65,7 @@ var Vertebrate = (function($) {
             var promise = $.ajax({
                 url: typeof(this.url) == 'undefined' ? Vertebrate.get('url') : this.url,
                 method: 'POST',
-                data: { data: JSON.stringify(this.get()) },
+                data: {"model":this.get()},
                 success: function(data, status, xhr) {
                     self.changedattrs = [];
                     if (typeof(callback) == 'function') callback.call(self,data, status, xhr);
@@ -78,7 +77,7 @@ var Vertebrate = (function($) {
             var promise = $.ajax({
                 url: typeof(this.url) == 'undefined' ? Vertebrate.get('url') : this.url,
                 method: 'GET',
-                data: this.get(),
+                data: {"model":this.get()},
                 success: function(data, status, xhr) {
                     self.changedattrs = [];
                     self.attributes = $.extend(self.attributes, data[0]);
@@ -91,7 +90,7 @@ var Vertebrate = (function($) {
             var promise = $.ajax({
                 url: typeof(this.url) == 'undefined' ? Vertebrate.get('url') : this.url,
                 method: 'DELETE',
-                data: JSON.stringify(this.get()),
+                data: {"model":this.get()},
                 success: function(data, status, xhr) {
                     $([self]).trigger('vertebrate:deleted', [self, self.attributes, data, status, xhr]);
                     $(document).trigger('vertebrate:deleted', [self, self.attributes, data, status, xhr]);
@@ -141,15 +140,19 @@ var Vertebrate = (function($) {
         * clears this.removed[]
         */
         this.save = function(callback) {
+            var postdata = {
+                "collection": {
+                    "attributes": this.get(),
+                    "models": JSON.stringify(this.models)
+                }
+            };
             var promise = $.ajax({
                 url: typeof(this.url) == 'undefined' ? Vertebrate.get('url') : this.url,
                 method: 'POST',
-                data: {
-                    "data": JSON.stringify([this.get(), this.models])
-                },
+                data: postdata,
                 success: function(data, status, xhr) {
                     self.removed = [];
-                    if (typeof(callback) == 'function') callback.call(self,data, status, xhr);
+                    if (typeof(callback) == 'function') callback.call(self, data, status, xhr);
                 }
             });
             return promise;
@@ -169,7 +172,7 @@ var Vertebrate = (function($) {
                 url: typeof(this.url) == 'undefined' ? Vertebrate.get('url') : this.url,
                 method: 'GET',
                 dataType: 'JSON',
-                data: this.get(),
+                data: {"collection":this.get()},
                 success: function(data, status, xhr) {
                     self.models = [];
                     $.each(data, function(i) {
@@ -235,8 +238,8 @@ var Vertebrate = (function($) {
         this.add = function(model) {
             self.added.push(model);
             self.models.push(model);
-            $([self]).trigger('vertebrate:added', [self.added, self.models]);
-            $(document).trigger('vertebrate:added', [self, self.added, self.models]);
+            $([self]).trigger('vertebrate:added', [model, self.added]);
+            $(document).trigger('vertebrate:added', [self, model, self.added]);
             return self.models.length;
         };
         this.remove = function(model) {
@@ -245,8 +248,8 @@ var Vertebrate = (function($) {
             });
             self.models = newmodels;
             self.removed.push(model);
-            $([self]).trigger('vertebrate:removed', [self.removed, self.models]);
-            $(document).trigger('vertebrate:removed', [self, self.removed, self.models]);
+            $([self]).trigger('vertebrate:removed', [model, self.removed]);
+            $(document).trigger('vertebrate:removed', [self, model, self.removed]);
             return self.models.length;
         };
         /**

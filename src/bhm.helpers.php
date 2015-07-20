@@ -15,30 +15,31 @@ switch ($_SERVER['REQUEST_METHOD']) {
     break;
 
     case 'POST':
-    $data = json_decode($_POST['data']);
+    $data = $_POST['model'];
     foreach($data as $k=>$v) {
-        $data->$k = $db->escape_string($v);
+        $data[$k] = $db->escape_string($v);
     }
     $sql = "INSERT INTO
                 bhm_help_modals (id,help_page_id,field_selecter,title,large,html)
-            VALUES ('$data->id',
-                    '$data->help_page_id',
-                    '$data->field_selecter',
-                    '$data->title',
-                    '$data->large',
-                    '$data->html')
+            VALUES ('$data[id]',
+                    '$data[help_page_id]',
+                    '$data[field_selecter]',
+                    '$data[title]',
+                    '$data[large]',
+                    '$data[html]')
             ON DUPLICATE KEY UPDATE
-                field_selecter = '$data->field_selecter',
-                title = '$data->title',
-                large = '$data->large',
-                html = '$data->html'";
+                field_selecter = '$data[field_selecter]',
+                title = '$data[title]',
+                large = '$data[large]',
+                html = '$data[html]'";
     $res = $db->query($sql) or die(mysqli_error($db));
     echo "saved";
     break;
 
     case 'DELETE':
-    $data = json_decode(file_get_contents("php://input"));
-    $sql = "DELETE FROM bhm_help_modals WHERE id='$data->id'";
+    parse_str(urldecode(file_get_contents("php://input")),$data);
+    $model = $data['model'];
+    $sql = "DELETE FROM bhm_help_modals WHERE id='$model[id]'";
     $res = $db->query($sql) or die(mysqli_error($db));
     echo 'deleted';
     break;
