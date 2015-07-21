@@ -30,7 +30,11 @@ var BHM = (function(Vertebrate, $, my) {
 
         //get all helps that are on this page
         var jsondata = [];
-        var helps = BHM.ch.findAll(model.get('id'),'help_page_id');
+        var helps = [];
+        var pageid = model.get('id');
+        $.each(BHM.ch.models,function(k,v) {
+            if (this.get('page_ids').indexOf(pageid) > -1) helps.push(this);
+        });
         $.each(helps,function() {
             jsondata.push(this.attributes);
         });
@@ -59,11 +63,28 @@ var BHM = (function(Vertebrate, $, my) {
         }
 
         //get filename, find tbody and prepend a new row
-        $('#bhmpanel'+model.get('help_page_id')+' .panel-body')
-            .find('tbody')
-            .prepend(
-                BHM.tmpl($('#templateHelperRow').html(),model.get())
-            );
+        var page_ids = model.get('page_ids').split(',');
+        $.each(page_ids,function(k,v) {
+            var prependto = false;
+            $('#bhmpanel'+v+' .panel-body tbody tr').each(function() {
+                var help = BHM.ch.find($(this).data('help-id'),'id');
+                if (model.get('field_selecter') > help.get('field_selecter')) {
+                    return true;
+                } else {
+                    prependto = $(this);
+                    return false;
+                }
+            });
+            var newrow = BHM.tmpl($('#templateHelperRow').html(),model.get());
+            if (!prependto) {
+                $('#bhmpanel'+v+' .panel-body tbody').append(newrow);
+            } else {
+                prependto.before(newrow);
+            }
+
+        });
+        if (page_ids.length > 1) $('.help'+model.get('id')).addClass('info');
+
     }
 
     //cp - pages collections - render
@@ -107,7 +128,7 @@ var BHM = (function(Vertebrate, $, my) {
     //keep track of console and settings in BHM.mc
     my.mc = {
         settings: {
-            addButton: '<button class="btn btn-sm btn-block btn-default addHelper">Add</button>',
+            addButton: '<button class="btn btn-sm btn-default btn-block addHelper">Add</button>',
             columns: ['Field Selecter', 'Modal Title', 'Size', 'Content', 'Save'],
             ajaxFail: false,
             templateurl: "",
