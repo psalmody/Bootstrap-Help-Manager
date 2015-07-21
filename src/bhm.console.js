@@ -27,7 +27,7 @@
         var self = this;
 
         var getPageFor = function( $obj ) {
-            return BHM.cp.find($obj.closest('.tab-pane').data('page-id'),'id');
+            return BHM.cp.find($obj.closest('.panel-default').data('pageid'),'id');
         };
         var getHelpFor = function( $obj ) {
             return BHM.ch.find($obj.closest('tr').data('help-id'),'id');
@@ -40,6 +40,7 @@
         $(document).on('vertebrate:fetched', function(e, c, ms) {
             c.render();
         }).on('vertebrate:changeattr',function(e,m,mattr,mchanged) {
+            if (m.has('url')) return false;
             getElForHelp(m).find('.saveHelp').addClass('btn-warning');
         });
 
@@ -68,12 +69,11 @@
                     var page = BHM.cp.find(model.get('help_page_id'),'id');
                     $.when(page.delete()).done(function() {
                         var cleanurl = BHM.clean(page.get('url'));
-                        $.when($('#_'+cleanurl).fadeOut(300)).then(function() {
-                            return $('#tab_'+cleanurl).closest('li').fadeOut(300);
+                        $.when($('#bhmpanel'+page.get('id')).fadeOut(300)).then(function() {
+                            return $('#bhmpanelheader'+page.get('id')).fadeOut(300);
                         }).then(function() {
-                            $('#tab_'+cleanurl).closest('li').remove();
-                            $('#_'+cleanurl).remove();
-                            self.find('.nav-tabs li:first a').click();
+                            $('#bhmpanel'+page.get('id')).closest('.panel-default').remove();
+                            self.find('.panel-title a:first').click();
                         })
 
                     });
@@ -121,7 +121,14 @@
             BHM.renderHelp(help);
             page.save();
             help.save();
-            $('#tab_'+BHM.clean(url)).click();
+            $('#bhmpanelheader'+page.get('id')+' a:first').click();
+        }).on('click','.bhm-change-url',function() {
+            page = getPageFor($(this));
+            var newurl = prompt("Enter the new url:",page.get('url'));
+            if (!newurl) return false;
+            page.set('url',newurl);
+            page.save();
+            $(this).closest('.panel-title').children('a').text(newurl);
         });
 
         //setup modal dialog

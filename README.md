@@ -1,4 +1,4 @@
-# Bootstrap-Help-Manager v 0.3.1
+# Bootstrap-Help-Manager v 0.4.0
 
 Bootstrap-Help-Manager (BHM) uses [VertebrateJS][3] and [jQuery][2] to provide a framework and console for managing help icons and content across an entire site.
 
@@ -34,8 +34,30 @@ client templates:
 $('body').BHMClient({
     templateurl: "templates/bhm.client.html",
     helpersurl: "src/bhm.helpers.php",
-    pagesurl: "src/bhm.pages.php"
+    pagesurl: "src/bhm.pages.php",
+    indexpage: "index.html"
 });
+```
+
+#### settings
+
+```
+templateurl: "/location/of/bhm.client.html",
+helpersurl: "/location/of/bhm.helpers.php",
+pagesurl: "/location/of/bhm.pages.php",
+indexpage: "string or array, see below"
+```
+
+For `indexpage` the setting can be either string or array. When BHM is unable to find helps for that page, it will try adding that string (or each string in the array) to the end of the `window.location.pathname` and see if that returns a page.
+
+Example:
+
+```
+indexpage: ["index.html","index.php","default.php"]
+```
+or
+```
+indexpage: "index.html"
 ```
 
 ### Customizing Help icons
@@ -82,8 +104,8 @@ $(function() {
 
 The admin console assigns helpers to DOM elements.
 
-1. Create a new page by clicking "New Page" tab.
-2. At the prompt, enter the full pathname (everything, including the / after .com / .net / .edu / .etc)
+1. Create a new page by clicking "Add New Page" button.
+2. At the prompt, enter the full pathname (everything including the / AFTER .com / .net / .edu / .etc. a/k/a `window.location.pathname`)
 3. A new page and helper will be automatically created and saved.
 4. Set "Field Selecter" as a [jQuery][1] selector that will select the items on that page you would like to add the help icon to.
 5. Set the title of the modal dialog window with "Modal Title".
@@ -91,7 +113,13 @@ The admin console assigns helpers to DOM elements.
 7. Edit the modal content with the "Edit" button.
 8. Save
 
-Deleting all the helpers for a page will also delete that page from the database.
+
+Note:
+
+1. Deleting all the helpers for a page will also delete that page from the database.
+2. ALWAYS add "index.html" (i.e. the appropriate index/default filename) to the end of the url
+for pages. Then use the `indexpage` setting in `$().BHMClient()` at initialization to help
+BHM find the correct page model.
 
 
 

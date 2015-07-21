@@ -1,5 +1,5 @@
 /**
-*  Bootstrap-Help-Manager v 0.3.1
+*  Bootstrap-Help-Manager v 0.4.0
 *  https://github.com/psalmody/Bootstrap-Help-Manager
 */
 /**
@@ -136,7 +136,8 @@ var BHM = (function(Vertebrate, $, my) {
         this.settings = $.extend({},{
             templateurl: "",
             helpersurl: "",
-            pagesurl: ""
+            pagesurl: "",
+            indexpage: ""
         },options);
 
         BHM.ch.url = this.settings.helpersurl;
@@ -147,9 +148,28 @@ var BHM = (function(Vertebrate, $, my) {
         var promise = BHM.cp.fetch();
 
         $.when(promise).done(function() {
-            var page = BHM.cp.find(window.location.pathname,'url');
 
-            if (!page) return false;
+            //first, look for the page
+            var pathname = window.location.pathname;
+            var page = BHM.cp.find(pathname,'url');
+            //if we can't find the page, check for index
+            if (!page && pathname.substr(pathname.length - 1) == '/') {
+                var indexpage = self.settings.indexpage;
+                if (typeof(indexpage) == 'string') {
+                    //if indexpage is a string, add it to url
+                    page = BHM.cp.find(pathname+self.settings.indexpage,'url');
+                    if (!page) return false;
+                } else if (indexpage.length > 0) {
+                    //if indexpage is an array, loop through each array item
+                    for (var i=0; i<indexpage.length; i++) {
+                        page = BHM.cp.find(pathname+indexpage[i],'url');
+                        if (typeof(page) == 'object') break;
+                    }
+                    if (!page) return false
+                }
+            } else if (!page) {
+                return false;
+            };
 
             var pageID = page.get('id');
 

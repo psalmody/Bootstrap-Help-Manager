@@ -24,19 +24,30 @@
         </td>
     </tr>
 </script>
-<script type="text/template" id="templateTabPanel">
-<div role="tabpanel" style="clear:both;">
-    <ul class="nav nav-tabs">
-    </ul>
-    <div class="tab-content">
-    </div>
-</div>
+<script type="text/template" id="templatePanelGroup">
+    <div class="panel-group" id="bhmPanelGroup" role="tablist" style="clear:both;"></div>
 </script>
-<script type="text/template" id="templateTabLI">
-    <li><a id="tab_<%= clean %>" href="#_<%= clean %>"><%= url %></a></li>
-</script>
-<script type="text/template" id="templateTabDiv">
-    <div class="tab-pane" id="_<%= clean %>" data-page-url="<%= url %>" data-page-id="<%= id %>">
+<script type="text/template" id="templatePanel">
+    <div class="panel panel-default" data-pageid="<%= id %>">
+        <div class="panel-heading" id="bhmpanelheader<%= id %>">
+
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#bhmPanelGroup" href="#bhmpanel<%= id %>">
+                    <%= url %>
+                </a>
+                <div class="dropdown" style="display:inline-block;">
+                    <button type="button" class="btn btn-default btn-sm" data-toggle="dropdown">Edit <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li style="cursor:pointer;"><a class="bhm-change-url">Change URL</a></li>
+                    </ul>
+                </div>
+            </h4>
+
+        </div>
+        <div id="bhmpanel<%= id %>" class="panel-collapse collapse">
+            <div class="panel-body">
+            </div>
+        </div>
     </div>
 </script>
 <script type="text/template" id="templateOpeningText">

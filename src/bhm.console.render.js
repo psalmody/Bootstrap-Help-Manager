@@ -13,21 +13,17 @@ var BHM = (function(Vertebrate, $, my) {
     var renderPage = function( model ) {
         var $el = BHM.mc.$el;
         cleanfilename = clean(model.get('url'));
-        //add a tab
-        $el.find('ul').append(BHM.tmpl($('#templateTabLI').html(),$.extend({},{clean:cleanfilename},model.attributes)));
-        //add a tab-content div
-        $el.find('.tab-content').append(BHM.tmpl($('#templateTabDiv').html(),$.extend({},{clean:cleanfilename},model.attributes)));
-
-        //first tab gets active
-        $el.find('ul li:first').addClass('active');
-        $el.find('.tab-content .tab-pane:first').addClass('active');
+        //add a panel
+        $el.find('.panel-group').append(BHM.tmpl($('#templatePanel').html(),$.extend({},{clean:cleanfilename},model.attributes)));
+        //first panel gets open
+        $el.find('.panel-collapse:first').addClass('in');
     }
 
     //render helps by page
     var renderHelps = function( model ) {
         var $el = BHM.mc.$el;
-        //we'll be attaching to this tab content
-        var tab = $('#_'+clean(model.get('url')));
+        //we'll be attaching to this panel content
+        var panel = $('#bhmpanel'+model.get('id')+' .panel-body');
         //columns for JSONTable from mc settings
         var cols = BHM.mc.settings.columns.slice(0);
         cols.push(BHM.mc.settings.addButton);
@@ -40,7 +36,7 @@ var BHM = (function(Vertebrate, $, my) {
         });
 
         //create JSONTable from group of helps
-        $el.find('#_'+clean(model.get('url'))).JSONTable({
+        panel.JSONTable({
             data: jsondata,
             template: $('#templateHelperRow'),
             templateParams: {'filename':model.get('url')},
@@ -56,14 +52,14 @@ var BHM = (function(Vertebrate, $, my) {
         var $el = BHM.mc.$el;
 
         //if there isn't a table yet, create one by running this as renderHelps
-        if ($('#_'+clean(model.get('filename'))).length) {
+        if ($('#bhmpanel'+model.get('help_page_id')+' .panel-body').length) {
             var page = BHM.cp.find(model.get('help_page_id'),'id');
             renderHelps( page );
             return true;
         }
 
         //get filename, find tbody and prepend a new row
-        $('#_'+clean(model.get('filename')))
+        $('#bhmpanel'+model.get('help_page_id')+' .panel-body')
             .find('tbody')
             .prepend(
                 BHM.tmpl($('#templateHelperRow').html(),model.get())
@@ -122,11 +118,6 @@ var BHM = (function(Vertebrate, $, my) {
         render: function() {
             //render this object - setup a few important things
             var self = this;
-            //bootstrap tab click functions
-            $('#helpsManager').on('click', '.nav.nav-tabs a', function(e) {
-                e.preventDefault()
-                $(this).tab('show')
-            });
 
             BHM.ch.url = this.settings.helpersurl;
             BHM.cp.url = this.settings.pagesurl;
@@ -141,7 +132,7 @@ var BHM = (function(Vertebrate, $, my) {
                 .then(function( data ) {
                     $('body').append(data);
                     CKEDITOR.replace('bhmTextareaEditor');
-                    self.$el.append(BHM.tmpl($('#templateTabPanel').html(), {}));
+                    self.$el.append(BHM.tmpl($('#templatePanelGroup').html(), {}));
                 })
                 .then(function() {
                     return BHM.cp.fetch()
