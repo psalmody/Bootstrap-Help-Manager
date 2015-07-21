@@ -11,18 +11,19 @@
             indexpage: ""
         },options);
 
-        BHM.ch.url = this.settings.helpersurl;
-        BHM.cp.url = this.settings.pagesurl;
+        BHM.ch.url = this.settings.clienturl;
+        BHM.ch.set('pathname',window.location.pathname);
+        BHM.ch.set('indexpage',this.settings.indexpage);
 
         var self = this;
 
-        var promise = BHM.cp.fetch();
+        //var promise = BHM.cp.fetch();
 
-        $.when(promise).done(function() {
+        //$.when(promise).done(function() {
 
             //first, look for the page
             var pathname = window.location.pathname;
-            var page = BHM.cp.find(pathname,'url');
+            /*var page = BHM.cp.find(pathname,'url');
             //if we can't find the page, check for index
             if (!page && pathname.substr(pathname.length - 1) == '/') {
                 var indexpage = self.settings.indexpage;
@@ -45,14 +46,14 @@
             var pageID = page.get('id');
 
             BHM.ch.set('page_id',pageID);
-
+            */
             BHM.ch.fetch(function() {
                 $.get(self.settings.templateurl,function(data) {
                     $('body').append(data);
                     BHM.ch.render();
                 })
             });
-        });
+        //});
 
         $('body').on('click','.bhm-helper',function() {
             var id = $(this).data('bhm-helper');

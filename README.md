@@ -75,7 +75,7 @@ The provided PHP scripts only require a MYSQLI connection setup at the top of th
 
 See `sql/MySQL.sql` for default setup scripts.
 
-Default tables are `bhm_help_pages` and `bhm_help_modals`.
+Default tables are `bhm_pages` and `bhm_helpers`.
 
 ### Console
 
