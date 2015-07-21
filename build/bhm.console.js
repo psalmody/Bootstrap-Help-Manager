@@ -1,5 +1,5 @@
 /**
-*  Bootstrap-Help-Manager v 0.4.0
+*  Bootstrap-Help-Manager v 0.5.0
 *  https://github.com/psalmody/Bootstrap-Help-Manager
 */
 /**
@@ -191,7 +191,8 @@ var BHM = (function(Vertebrate, $, my) {
             field_selecter: '',
             title: '',
             large: false,
-            html: ''
+            html: '',
+            page_ids: []
         },
         /*url: BHM.helpersurl*/
     })
@@ -253,7 +254,11 @@ var BHM = (function(Vertebrate, $, my) {
 
         //get all helps that are on this page
         var jsondata = [];
-        var helps = BHM.ch.findAll(model.get('id'),'help_page_id');
+        var helps = [];
+        var pageid = model.get('id');
+        $.each(BHM.ch.models,function(k,v) {
+            if (this.get('page_ids').indexOf(pageid) > -1) helps.push(this);
+        });
         $.each(helps,function() {
             jsondata.push(this.attributes);
         });
@@ -262,7 +267,6 @@ var BHM = (function(Vertebrate, $, my) {
         panel.JSONTable({
             data: jsondata,
             template: $('#templateHelperRow'),
-            templateParams: {'filename':model.get('url')},
             columns: cols,
             success: function() {
                 $('.helpHTML').hide();
@@ -282,11 +286,28 @@ var BHM = (function(Vertebrate, $, my) {
         }
 
         //get filename, find tbody and prepend a new row
-        $('#bhmpanel'+model.get('help_page_id')+' .panel-body')
-            .find('tbody')
-            .prepend(
-                BHM.tmpl($('#templateHelperRow').html(),model.get())
-            );
+        var page_ids = model.get('page_ids').split(',');
+        $.each(page_ids,function(k,v) {
+            var prependto = false;
+            $('#bhmpanel'+v+' .panel-body tbody tr').each(function() {
+                var help = BHM.ch.find($(this).data('help-id'),'id');
+                if (model.get('field_selecter') > help.get('field_selecter')) {
+                    return true;
+                } else {
+                    prependto = $(this);
+                    return false;
+                }
+            });
+            var newrow = BHM.tmpl($('#templateHelperRow').html(),model.get());
+            if (!prependto) {
+                $('#bhmpanel'+v+' .panel-body tbody').append(newrow);
+            } else {
+                prependto.before(newrow);
+            }
+
+        });
+        if (page_ids.length > 1) $('.help'+model.get('id')).addClass('info');
+
     }
 
     //cp - pages collections - render
@@ -330,7 +351,7 @@ var BHM = (function(Vertebrate, $, my) {
     //keep track of console and settings in BHM.mc
     my.mc = {
         settings: {
-            addButton: '<button class="btn btn-sm btn-block btn-default addHelper">Add</button>',
+            addButton: '<button class="btn btn-sm btn-default btn-block addHelper">Add</button>',
             columns: ['Field Selecter', 'Modal Title', 'Size', 'Content', 'Save'],
             ajaxFail: false,
             templateurl: "",
@@ -405,7 +426,7 @@ var BHM = (function(Vertebrate, $, my) {
             return BHM.ch.find($obj.closest('tr').data('help-id'),'id');
         };
         var getElForHelp = function( model ) {
-            return $('#help'+model.get('id'));
+            return $('.help'+model.get('id'));
         };
 
 
@@ -429,8 +450,10 @@ var BHM = (function(Vertebrate, $, my) {
             if (val == old) return false;
             model.set($(this).data('attr'),val);
         }).on('click','.saveHelp',function() {
-            getHelpFor( $(this) ).save();
-            $(this).removeClass('btn-warning');
+            var help = getHelpFor( $(this) );
+            help.save();
+            var el = getElForHelp(help);
+            el.find('.saveHelp').removeClass('btn-warning');
         }).on('click','.deleteHelp',function() {
             var sure = confirm('Are you sure you want to delete this row?');
             if (!sure) return false;
@@ -459,18 +482,16 @@ var BHM = (function(Vertebrate, $, my) {
         }).on('click','.addHelper',function() {
             var page = getPageFor($(this));
             var model = new BHM.helper({
-                id: BHM.ch.next('id').toString(),
-                filename: page.get('url'),
-                help_page_id: page.get('id')
+                id: BHM.ch.next('id').toString()
             });
             BHM.ch.add(model);
             BHM.renderHelp( model );
             getElForHelp( model ).find('.saveHelp').addClass('btn-warning');
         }).on('click','.editHelp',function() {
             var model = getHelpFor($(this));
-            var modal = $('#bhmModal');
-            $('#bhmModalFilename').text(model.get('filename'));
-            $('#bhmModalFieldselecter').text(model.get('field_selecter'));
+            var modal = $('#bhmEditHtmlModal');
+            $('#bhmEditHtmlModalFilename').text(model.get('filename'));
+            $('#bhmEditHtmlModalFieldselecter').text(model.get('field_selecter'));
             CKEDITOR.instances['bhmTextareaEditor'].setData(model.get('html'));
             modal.data('helpId',model.get('id'));
             modal.modal();
@@ -484,8 +505,7 @@ var BHM = (function(Vertebrate, $, my) {
             });
             var help = new BHM.helper({
                 "id": BHM.ch.next('id'),
-                "filename": url,
-                "help_page_id": id
+                "page_ids": id
             })
             BHM.cp.add(page);
             BHM.ch.add(help);
@@ -501,16 +521,75 @@ var BHM = (function(Vertebrate, $, my) {
             page.set('url',newurl);
             page.save();
             $(this).closest('.panel-title').children('a').text(newurl);
+        }).on('click','.addToPages',function() {
+            help = getHelpFor($(this));
+            var modal = $('#bhmSelectMultipleModal');
+            modal.data('helpid',help.get('id'));
+            var pages = BHM.cp.models;
+            var rows = [];
+            $.each(pages,function() {
+                var checkbox = '<input type="checkbox" value="'+this.get('id')+'">';
+                var row = {
+                    "checkbox": checkbox,
+                    url: this.get('url')
+                };
+                rows.push(row);
+            });
+            modal.find('.modal-body').JSONTable({
+                data: rows,
+                columns: ['Appears On:','Page:']
+            })
+            modal.find('.modal-body tbody input[type="checkbox"]').each(function() {
+                if (help.get('page_ids').indexOf($(this).val()) > -1) $(this).attr('checked',true);
+            })
+            modal.modal();
         });
 
         //setup modal dialog
-        $('body').on('click','#bhmModal .btn-save-html', function() {
-            var modal = $('#bhmModal'),
+        $('body').on('click','#bhmEditHtmlModal .btn-save-html', function() {
+            var modal = $('#bhmEditHtmlModal'),
                 model = BHM.ch.find(modal.data('helpId'),'id');
             model.set('html',CKEDITOR.instances['bhmTextareaEditor'].getData());
             CKEDITOR.instances['bhmTextareaEditor'].setData('');
-            $('#bhmModal').modal('hide');
+            $('#bhmEditHtmlModal').modal('hide');
         });
+
+        //setup multi-page dialog
+        $('body').on('click','#bhmSelectMultipleModal .btn-save-page-ids',function() {
+            var modal = $('#bhmSelectMultipleModal'),
+                model = BHM.ch.find(modal.data('helpid'),'id');
+            //setup modal with all pages in it as checkboxes
+            var newpageids = [];
+            if (!modal.find('input[type="checkbox"]:checked').length) {
+                alert('At least one checkbox must be selected.');
+                return false;
+            }
+            //for each checkbox :checked, make list of ids
+            modal.find('input[type="checkbox"]:checked').each(function() {
+                newpageids.push($(this).val());
+            })
+            var el = getElForHelp(model);
+            if (newpageids.length > 1) {
+                //we show the info class on helps that have multiple pages
+                el.addClass('info');
+            } else {
+                el.removeClass('info');
+            }
+            newpageids = newpageids.join(',');
+            //set, hide the modal
+            model.set('page_ids',newpageids);
+            modal.modal('hide');
+            //re-render this model
+            el.remove();
+            BHM.renderHelp(model);
+            var newel = getElForHelp(model);
+            //mark as needing saved
+            newel.find('.saveHelp').addClass('btn-warning');
+            //make sure at least the first model is visible
+            if (!newel.first().is(':visible')) {
+                newel.first().closest('.panel').find('.panel-title').children('a').click();
+            }
+        })
 
     }
 }(jQuery));

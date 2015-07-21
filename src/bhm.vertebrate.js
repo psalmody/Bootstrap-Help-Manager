@@ -10,7 +10,8 @@ var BHM = (function(Vertebrate, $, my) {
             field_selecter: '',
             title: '',
             large: false,
-            html: ''
+            html: '',
+            page_ids: []
         },
         /*url: BHM.helpersurl*/
     })

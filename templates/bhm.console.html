@@ -1,7 +1,7 @@
 <script type="text/template" id="templateHelperRow">
-    <tr id="help<%= id %>" data-help-id="<%= id %>" data-page-url="<%= filename %>">
+    <tr class="<% if (page_ids.indexOf(',') > -1) { %> info <% } %> help<%= id %>" data-help-id="<%= id %>">
         <td class="form-group">
-            <input class="form-control input-sm" type="text" value="<%= field_selecter %>" data-value="<%= field_selecter %>" data-attr="field_selecter">
+            <input title="<%= id %>" class="form-control input-sm" type="text" value="<%= field_selecter %>" data-value="<%= field_selecter %>" data-attr="field_selecter">
         </td>
         <td class="form-group">
             <input class="form-control input-sm" name="title" type="text" value="<%= title %>" data-value="<%= title %>" data-attr="title">
@@ -14,13 +14,19 @@
             </div>
         </td>
         <td>
-            <button class="btn btn-default btn-sm btn-block editHelp" data-field-id="<%= field_selecter %>" data-filename="<%= filename %>">Edit</button>
+            <button class="btn btn-default btn-sm btn-block editHelp" data-field-id="<%= field_selecter %>">Edit</button>
         </td>
         <td>
-            <button class="btn btn-default btn-sm btn-block saveHelp" data-field-id="<%= field_selecter %>" data-filename="<%= filename %>" data-ajaxed="true">Save</button>
+            <button class="btn btn-default btn-sm btn-block saveHelp" data-field-id="<%= field_selecter %>" data-ajaxed="true">Save</button>
         </td>
         <td>
-            <button class="btn btn-default btn-sm btn-block deleteHelp" data-field-id="<%= field_selecter %>" data-filename="<%= filename %>">Delete</button>
+            <div class="dropdown">
+                <button type="button" class="btn btn-sm btn-block btn-default" data-toggle="dropdown">More <span class="caret"></span></button>
+                <ul style="cursor:pointer;" class="dropdown-menu">
+                    <li><a class="addToPages" data-field-id="<%= field_selecter %>">Change pages</a></li>
+                    <li><a class="deleteHelp" data-field-id="<%= field_selecter %>">Delete</a></li>
+                </ul>
+            </div>
         </td>
     </tr>
 </script>
@@ -37,8 +43,8 @@
                 </a>
                 <div class="dropdown" style="display:inline-block;">
                     <button type="button" class="btn btn-default btn-sm" data-toggle="dropdown">Edit <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li style="cursor:pointer;"><a class="bhm-change-url">Change URL</a></li>
+                    <ul style="cursor:pointer;" class="dropdown-menu">
+                        <li><a class="bhm-change-url">Change URL</a></li>
                     </ul>
                 </div>
             </h4>
@@ -53,20 +59,37 @@
 <script type="text/template" id="templateOpeningText">
     <h1>Bootstrap-Help-Manager Console</h1>
     <button type="button" id="BHMaddPage" class="btn btn-default btn-md pull-right">Add New Page</button>
-    <p>Use this console to edit the sitewide help content.</p>
+    <p>Use this console to edit the sitewide help content. <span class="bg-info">Highlighted</span> rows exist on multiple pages. Changing one will change all.</p>
 </script>
-<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="bhmModal">
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="bhmEditHtmlModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Edit Help Bubble: <span id="bhmModalFilename"></span> / <span id="bhmModalFieldselecter"></span></h4>
+        <h4 class="modal-title">Edit Help Bubble: <span id="bhmEditHtmlModalFilename"></span> / <span id="bhmEditHtmlModalFieldselecter"></span></h4>
       </div>
       <div class="modal-body">
         <textarea class="edit-html-textarea ckeditor" id="bhmTextareaEditor"></textarea>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary btn-save-html">OK</button>
+        <button type="button" class="btn btn-default btn-cancel" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="bhmSelectMultipleModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Select pages for this help to appear on:</h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-save-page-ids">OK</button>
         <button type="button" class="btn btn-default btn-cancel" data-dismiss="modal">Cancel</button>
       </div>
     </div>
