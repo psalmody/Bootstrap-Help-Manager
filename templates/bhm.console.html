@@ -1,5 +1,5 @@
 <script type="text/template" id="templateHelperRow">
-    <tr class="<% if (page_ids.indexOf(',') > -1) { %> info <% } %> help<%= id %>" data-help-id="<%= id %>" data-page-url="<%= filename %>">
+    <tr class="<% if (page_ids.indexOf(',') > -1) { %> info <% } %> help<%= id %>" data-help-id="<%= id %>">
         <td class="form-group">
             <input title="<%= id %>" class="form-control input-sm" type="text" value="<%= field_selecter %>" data-value="<%= field_selecter %>" data-attr="field_selecter">
         </td>
@@ -14,17 +14,17 @@
             </div>
         </td>
         <td>
-            <button class="btn btn-default btn-sm btn-block editHelp" data-field-id="<%= field_selecter %>" data-filename="<%= filename %>">Edit</button>
+            <button class="btn btn-default btn-sm btn-block editHelp" data-field-id="<%= field_selecter %>">Edit</button>
         </td>
         <td>
-            <button class="btn btn-default btn-sm btn-block saveHelp" data-field-id="<%= field_selecter %>" data-filename="<%= filename %>" data-ajaxed="true">Save</button>
+            <button class="btn btn-default btn-sm btn-block saveHelp" data-field-id="<%= field_selecter %>" data-ajaxed="true">Save</button>
         </td>
         <td>
             <div class="dropdown">
                 <button type="button" class="btn btn-sm btn-block btn-default" data-toggle="dropdown">More <span class="caret"></span></button>
                 <ul style="cursor:pointer;" class="dropdown-menu">
-                    <li><a class="addToPages" data-field-id="<%= field_selecter %>" data-filename="<%= filename %>">Change pages</a></li>
-                    <li><a class="deleteHelp" data-field-id="<%= field_selecter %>" data-filename="<%= filename %>">Delete</a></li>
+                    <li><a class="addToPages" data-field-id="<%= field_selecter %>">Change pages</a></li>
+                    <li><a class="deleteHelp" data-field-id="<%= field_selecter %>">Delete</a></li>
                 </ul>
             </div>
         </td>

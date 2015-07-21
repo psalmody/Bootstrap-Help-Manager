@@ -89,9 +89,7 @@
         }).on('click','.addHelper',function() {
             var page = getPageFor($(this));
             var model = new BHM.helper({
-                id: BHM.ch.next('id').toString(),
-                filename: page.get('url'),
-                help_page_id: page.get('id')
+                id: BHM.ch.next('id').toString()
             });
             BHM.ch.add(model);
             BHM.renderHelp( model );
@@ -114,7 +112,6 @@
             });
             var help = new BHM.helper({
                 "id": BHM.ch.next('id'),
-                "filename": url,
                 "page_ids": id
             })
             BHM.cp.add(page);

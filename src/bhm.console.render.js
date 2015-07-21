@@ -43,7 +43,6 @@ var BHM = (function(Vertebrate, $, my) {
         panel.JSONTable({
             data: jsondata,
             template: $('#templateHelperRow'),
-            templateParams: {'filename':model.get('url')},
             columns: cols,
             success: function() {
                 $('.helpHTML').hide();

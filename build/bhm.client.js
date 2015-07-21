@@ -1,5 +1,5 @@
 /**
-*  Bootstrap-Help-Manager v 0.4.0
+*  Bootstrap-Help-Manager v 0.5.0
 *  https://github.com/psalmody/Bootstrap-Help-Manager
 */
 /**

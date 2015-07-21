@@ -1,4 +1,4 @@
-# Bootstrap-Help-Manager v 0.4.0
+# Bootstrap-Help-Manager v 0.5.0
 
 Bootstrap-Help-Manager (BHM) uses [VertebrateJS][3] and [jQuery][2] to provide a framework and console for managing help icons and content across an entire site.
 
@@ -33,8 +33,7 @@ client templates:
 ```JavaScript
 $('body').BHMClient({
     templateurl: "templates/bhm.client.html",
-    helpersurl: "src/bhm.helpers.php",
-    pagesurl: "src/bhm.pages.php",
+    clienturl: "src/bhm.client.php",
     indexpage: "index.html"
 });
 ```
@@ -43,8 +42,7 @@ $('body').BHMClient({
 
 ```
 templateurl: "/location/of/bhm.client.html",
-helpersurl: "/location/of/bhm.helpers.php",
-pagesurl: "/location/of/bhm.pages.php",
+clienturl: "/location/of/bhm.client.php",
 indexpage: "string or array, see below"
 ```
 
@@ -75,7 +73,7 @@ The provided PHP scripts only require a MYSQLI connection setup at the top of th
 
 See `sql/MySQL.sql` for default setup scripts.
 
-Default tables are `bhm_pages` and `bhm_helpers`.
+Default tables are `bhm_pages`, `bhm_helpers` and (since v0.5.0) `bhm_relationships`.
 
 ### Console
 
@@ -120,8 +118,33 @@ Note:
 2. ALWAYS add "index.html" (i.e. the appropriate index/default filename) to the end of the url
 for pages. Then use the `indexpage` setting in `$().BHMClient()` at initialization to help
 BHM find the correct page model.
+3. Helpers may exist on multiple pages. Bootstrap `info` class is added to helpers on multiple pages.
 
+## Notes about Server-Side / Database Setup for non PHP / MySQL Implementation
 
+The setup queries in `src/sql/MySQL.sql` should work for _most_ SQL databases.
+
+Follow the comments in the three PHP files carefully to understand the JSON
+data that the client and server JS files expect. Here's a basic help model:
+
+```JSON
+helper: {
+    "id": "1",                       //unique ID from bhm_helpers
+    "field_selecter": ".bhm-helper", //CSS/jQuery selector to attach help icon to
+    "large": "1",                    //1 or 0 - 1 is large
+    "page_ids": "2,3",               //comma-separated page ids, not used for client
+    "title": "Help with Something",  //title of modal when help pops up
+    "html": "<p>Modal Content</p>"   //html content of help modal
+}
+```
+
+Page models are:
+```JSON
+page: {
+    "id": "1",              //unique ID from bhm_pages
+    "url": "/foo/bar.html"  //unique URL of page - always include 'index.html'
+}
+```
 
 [1]: https://jquery.com/
 [2]: http://getBootstrap.com

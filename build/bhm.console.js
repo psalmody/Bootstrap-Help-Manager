@@ -1,5 +1,5 @@
 /**
-*  Bootstrap-Help-Manager v 0.4.0
+*  Bootstrap-Help-Manager v 0.5.0
 *  https://github.com/psalmody/Bootstrap-Help-Manager
 */
 /**
@@ -267,7 +267,6 @@ var BHM = (function(Vertebrate, $, my) {
         panel.JSONTable({
             data: jsondata,
             template: $('#templateHelperRow'),
-            templateParams: {'filename':model.get('url')},
             columns: cols,
             success: function() {
                 $('.helpHTML').hide();
@@ -483,9 +482,7 @@ var BHM = (function(Vertebrate, $, my) {
         }).on('click','.addHelper',function() {
             var page = getPageFor($(this));
             var model = new BHM.helper({
-                id: BHM.ch.next('id').toString(),
-                filename: page.get('url'),
-                help_page_id: page.get('id')
+                id: BHM.ch.next('id').toString()
             });
             BHM.ch.add(model);
             BHM.renderHelp( model );
@@ -508,7 +505,6 @@ var BHM = (function(Vertebrate, $, my) {
             });
             var help = new BHM.helper({
                 "id": BHM.ch.next('id'),
-                "filename": url,
                 "page_ids": id
             })
             BHM.cp.add(page);
