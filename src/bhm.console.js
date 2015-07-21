@@ -40,6 +40,7 @@
         $(document).on('vertebrate:fetched', function(e, c, ms) {
             c.render();
         }).on('vertebrate:changeattr',function(e,m,mattr,mchanged) {
+            if (m.has('url')) return false;
             getElForHelp(m).find('.saveHelp').addClass('btn-warning');
         });
 
@@ -121,6 +122,13 @@
             page.save();
             help.save();
             $('#bhmpanelheader'+page.get('id')+' a').click();
+        }).on('click','.bhm-change-url',function() {
+            page = getPageFor($(this));
+            var newurl = prompt("Enter the new url:");
+            if (!newurl) return false;
+            page.set('url',newurl);
+            page.save();
+            $(this).closest('.panel-title').children('a').text(newurl);
         });
 
         //setup modal dialog

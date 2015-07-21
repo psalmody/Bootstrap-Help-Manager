@@ -12,9 +12,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'POST':
     $data = $_POST['model'];
-    $sql = "INSERT INTO bhm_help_pages(id,url) VALUES('$data[id]','$data[url]')";
+    $sql = "INSERT INTO bhm_help_pages(id,url) VALUES('$data[id]','$data[url]') ON DUPLICATE KEY UPDATE url=VALUES(url)";
     $result = $db->query($sql) or die(mysqli_error($db));
-    echo "added";
+    echo "saved";
     break;
 
     case 'DELETE':
