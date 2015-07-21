@@ -34,8 +34,30 @@ client templates:
 $('body').BHMClient({
     templateurl: "templates/bhm.client.html",
     helpersurl: "src/bhm.helpers.php",
-    pagesurl: "src/bhm.pages.php"
+    pagesurl: "src/bhm.pages.php",
+    indexpage: "index.html"
 });
+```
+
+#### settings
+
+```
+templateurl: "/location/of/bhm.client.html",
+helpersurl: "/location/of/bhm.helpers.php",
+pagesurl: "/location/of/bhm.pages.php",
+indexpage: "string or array, see below"
+```
+
+For `indexpage` the setting can be either string or array. When BHM is unable to find helps for that page, it will try adding that string (or each string in the array) to the end of the `window.location.pathname` and see if that returns a page.
+
+Example:
+
+```
+indexpage: ["index.html","index.php","default.php"]
+```
+or
+```
+indexpage: "index.html"
 ```
 
 ### Customizing Help icons
@@ -91,7 +113,13 @@ The admin console assigns helpers to DOM elements.
 7. Edit the modal content with the "Edit" button.
 8. Save
 
-Deleting all the helpers for a page will also delete that page from the database.
+
+Note:
+
+1. Deleting all the helpers for a page will also delete that page from the database.
+2. ALWAYS add "index.html" (i.e. the appropriate index/default filename) to the end of the url
+for pages. Then use the `indexpage` setting in `$().BHMClient()` at initialization to help
+BHM find the correct page model.
 
 
 
