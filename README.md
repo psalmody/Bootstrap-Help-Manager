@@ -104,8 +104,8 @@ $(function() {
 
 The admin console assigns helpers to DOM elements.
 
-1. Create a new page by clicking "New Page" tab.
-2. At the prompt, enter the full pathname (everything, including the / after .com / .net / .edu / .etc)
+1. Create a new page by clicking "Add New Page" button.
+2. At the prompt, enter the full pathname (everything including the / AFTER .com / .net / .edu / .etc. a/k/a `window.location.pathname`)
 3. A new page and helper will be automatically created and saved.
 4. Set "Field Selecter" as a [jQuery][1] selector that will select the items on that page you would like to add the help icon to.
 5. Set the title of the modal dialog window with "Modal Title".
