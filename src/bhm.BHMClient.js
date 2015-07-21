@@ -7,7 +7,8 @@
         this.settings = $.extend({},{
             templateurl: "",
             helpersurl: "",
-            pagesurl: ""
+            pagesurl: "",
+            indexpage: ""
         },options);
 
         BHM.ch.url = this.settings.helpersurl;
@@ -18,9 +19,25 @@
         var promise = BHM.cp.fetch();
 
         $.when(promise).done(function() {
-            var page = BHM.cp.find(window.location.pathname,'url');
 
-            if (!page) return false;
+            //first, look for the page
+            var page = BHM.cp.find(window.location.pathname,'url');
+            //if we can't find the page, check for index
+            if (!page) {
+                var indexpage = self.settings.indexpage;
+                if (typeof(indexpage) == 'string') {
+                    //if indexpage is a string, add it to url
+                    page = BHM.cp.find(window.location.pathname+self.settings.indexpage,'url');
+                    if (!page) return false;
+                } else if (indexpage.length > 0) {
+                    //if indexpage is an array, loop through each array item
+                    for (var i=0; i<indexpage.length; i++) {
+                        page = BHM.cp.find(window.location.pathname+indexpage[i],'url');
+                        if (typeof(page) == 'object') break;
+                    }
+                    if (!page) return false
+                }
+            };
 
             var pageID = page.get('id');
 

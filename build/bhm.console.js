@@ -1,5 +1,5 @@
 /**
-*  Bootstrap-Help-Manager v 0.3.1
+*  Bootstrap-Help-Manager v 0.4.0
 *  https://github.com/psalmody/Bootstrap-Help-Manager
 */
 /**
@@ -493,10 +493,10 @@ var BHM = (function(Vertebrate, $, my) {
             BHM.renderHelp(help);
             page.save();
             help.save();
-            $('#bhmpanelheader'+page.get('id')+' a').click();
+            $('#bhmpanelheader'+page.get('id')+' a:first').click();
         }).on('click','.bhm-change-url',function() {
             page = getPageFor($(this));
-            var newurl = prompt("Enter the new url:");
+            var newurl = prompt("Enter the new url:",page.get('url'));
             if (!newurl) return false;
             page.set('url',newurl);
             page.save();

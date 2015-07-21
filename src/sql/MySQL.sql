@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `bhm_help_modals` (
   `html` text CHARACTER SET utf8 NOT NULL,
   UNIQUE KEY `id` (`id`),
   KEY `filename` (`help_page_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `bhm_help_modals`
@@ -47,7 +47,8 @@ INSERT INTO `bhm_help_modals` (`id`, `help_page_id`, `field_selecter`, `title`, 
 (3, 1, '.bhm-help-input', 'Help with Input (Group)', 0, '<p>Input-group help</p>\n\n<p>&nbsp;</p>\n\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n'),
 (4, 1, '#bhm-button-help', 'Help with Button', 0, '<p><code>&lt;button&gt;</code>s will be wrapped&nbsp;in&nbsp;<code>.btn-group</code>s.&nbsp;</p>\n\n<p>Note: <code>.btn-block</code> classes will be removed from <code>&lt;button&gt;</code>s as <code>.btn-group</code> breaks the btn-block styling.</p>\n'),
 (5, 1, 'textarea', 'Help with Textarea', 1, '<p>Textarea helpers look for the attached label (closest <code>.form-group</code>''s child label) and appends there.</p>\n\n<p>If no label is found, the help icon is added before the <code>&lt;textarea&gt;</code>.</p>\n'),
-(6, 1, 'select', 'Help with Select', 0, '<p><code>&lt;select&gt;</code> tags receive <code>.input-group</code> icons. Use caution when adding helpers to <code>&lt;selects&gt;</code>s as bootstrap''s documentation states:</p>\n\n<blockquote>\n<p>Textual <code>&lt;input&gt;</code>s only</p>\n\n<p>Avoid using <code>&lt;select&gt;</code> elements here as they cannot be fully styled in WebKit browsers.</p>\n\n<p>Avoid using <code>&lt;textarea&gt;</code> elements here as their <code>rows</code> attribute will not be respected in some cases.</p>\n</blockquote>\n');
+(6, 1, 'select', 'Help with Select', 0, '<p><code>&lt;select&gt;</code> tags receive <code>.input-group</code> icons. Use caution when adding helpers to <code>&lt;selects&gt;</code>s as bootstrap''s documentation states:</p>\n\n<blockquote>\n<p>Textual <code>&lt;input&gt;</code>s only</p>\n\n<p>Avoid using <code>&lt;select&gt;</code> elements here as they cannot be fully styled in WebKit browsers.</p>\n\n<p>Avoid using <code>&lt;textarea&gt;</code> elements here as their <code>rows</code> attribute will not be respected in some cases.</p>\n</blockquote>\n'),
+(7, 2, 'h2', 'Help with Headings', 0, 'Hey! It\'s working on an index page! Try accessing with and without the /index.html at the end of the url.');
 
 -- --------------------------------------------------------
 
@@ -67,7 +68,8 @@ CREATE TABLE IF NOT EXISTS `bhm_help_pages` (
 --
 
 INSERT INTO `bhm_help_pages` (`id`, `url`) VALUES
-(1, '/dev/Bootstrap-Help-Manager/tests/bhm.testclient.html');
+(1, '/dev/Bootstrap-Help-Manager/tests/bhm.testclient.html'),
+(2, '/dev/Bootstrap-Help-Manager/tests/index.html');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

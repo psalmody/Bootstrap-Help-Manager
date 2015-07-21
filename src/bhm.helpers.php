@@ -5,8 +5,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
     $sql = "SELECT *
             FROM bhm_help_modals";
-    if (isset($_GET['page_id'])) {
-        $sql .= " WHERE help_page_id = $_GET[page_id] ";
+    if (isset($_GET['collection']['page_id'])) {
+        $pageid = $_GET['collection']['page_id'];
+        $sql .= " WHERE help_page_id = $pageid ";
     }
     $sql .= " ORDER BY field_selecter, title";
     $result = $db->query($sql) or die(mysqli_error($db));
