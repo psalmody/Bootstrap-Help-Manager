@@ -2,7 +2,7 @@
 
 Bootstrap-Help-Manager (BHM) uses [VertebrateJS][3] and [jQuery][2] to provide a framework and console for managing help icons and content across an entire site.
 
-On the client side, including [VertebrateJS][3] and `bhm.clientside.min.js` totals around 8k.
+On the client side, including [VertebrateJS][3] and `bhm.client.min.js` totals around 10k.
 
 The console is provided as a jQuery plugin. It will send ajax requests to the helpers and pages handling scripts to manage the database backend. Two [PHP][4] handlers with a [MySQL][5] database setup have been provided which could be used to provide the necessary functionality. Any other server-side / database method could be created pretty simply.
 
