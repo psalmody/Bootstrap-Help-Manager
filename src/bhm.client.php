@@ -1,5 +1,5 @@
 <?php
-require('../mysql-creds.php');
+require('mysql.php');
 
 //var_dump($_GET);
 
@@ -19,10 +19,16 @@ $res = $db->query(makequery($path)) or die(mysqli_error($db));
 
 if ($res->num_rows < 1) {
     $index = $_GET['collection']['indexpage'];
-    for($i=0; $i < count($index); $i++ ) {
-        $p = $path.$index[$i];
+    if (gettype($index) != 'array') {
+        $p = $path.$index;
         $res = $db->query(makequery($p)) or die(mysqli_error($db));
-        if ($res->num_rows > 0) break;
+    } else {
+        for($i=0; $i < count($index); $i++ ) {
+            $p = $path.$index[$i];
+            echo $p;
+            $res = $db->query(makequery($p)) or die(mysqli_error($db));
+            if ($res->num_rows > 0) break;
+        }
     }
 }
 
