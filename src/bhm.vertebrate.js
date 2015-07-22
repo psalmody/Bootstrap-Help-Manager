@@ -11,7 +11,7 @@ var BHM = (function(Vertebrate, $, my) {
             title: '',
             large: false,
             html: '',
-            page_ids: []
+            page_ids: ''
         },
         /*url: BHM.helpersurl*/
     })

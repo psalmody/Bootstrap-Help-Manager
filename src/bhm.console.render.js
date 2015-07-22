@@ -55,8 +55,8 @@ var BHM = (function(Vertebrate, $, my) {
         var $el = BHM.mc.$el;
 
         //if there isn't a table yet, create one by running this as renderHelps
-        if ($('#bhmpanel'+model.get('help_page_id')+' .panel-body').length) {
-            var page = BHM.cp.find(model.get('help_page_id'),'id');
+        if (!$('#bhmpanel'+model.get('page_ids')+' .panel-body tbody').length) {
+            var page = BHM.cp.find(model.get('page_ids'),'id');
             renderHelps( page );
             return true;
         }
