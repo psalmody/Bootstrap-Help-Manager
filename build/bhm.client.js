@@ -1,5 +1,5 @@
 /**
-*  Bootstrap-Help-Manager v 0.5.1
+*  Bootstrap-Help-Manager v 0.5.2
 *  https://github.com/psalmody/Bootstrap-Help-Manager
 */
 /**
@@ -15,7 +15,7 @@ var BHM = (function(Vertebrate, $, my) {
             title: '',
             large: false,
             html: '',
-            page_ids: []
+            page_ids: ''
         },
         /*url: BHM.helpersurl*/
     })

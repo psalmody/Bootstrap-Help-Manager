@@ -1,5 +1,5 @@
 /**
-*  Bootstrap-Help-Manager v 0.5.1
+*  Bootstrap-Help-Manager v 0.5.2
 *  https://github.com/psalmody/Bootstrap-Help-Manager
 */
 /**
@@ -192,7 +192,7 @@ var BHM = (function(Vertebrate, $, my) {
             title: '',
             large: false,
             html: '',
-            page_ids: []
+            page_ids: ''
         },
         /*url: BHM.helpersurl*/
     })
@@ -279,8 +279,8 @@ var BHM = (function(Vertebrate, $, my) {
         var $el = BHM.mc.$el;
 
         //if there isn't a table yet, create one by running this as renderHelps
-        if ($('#bhmpanel'+model.get('help_page_id')+' .panel-body').length) {
-            var page = BHM.cp.find(model.get('help_page_id'),'id');
+        if (!$('#bhmpanel'+model.get('page_ids')+' .panel-body tbody').length) {
+            var page = BHM.cp.find(model.get('page_ids'),'id');
             renderHelps( page );
             return true;
         }
@@ -458,31 +458,31 @@ var BHM = (function(Vertebrate, $, my) {
             var sure = confirm('Are you sure you want to delete this row?');
             if (!sure) return false;
             var model = getHelpFor($(this));
+            var page = getPageFor($(this));
+            var modelel = getElForHelp(model);
+            var panel = modelel.closest('.panel');
             BHM.ch.remove(model);
             $.when(model.delete()).done(function() {
-                if (!BHM.ch.findAll(model.get('help_page_id'),'help_page_id')) {
-                    var page = BHM.cp.find(model.get('help_page_id'),'id');
-                    $.when(page.delete()).done(function() {
-                        var cleanurl = BHM.clean(page.get('url'));
-                        $.when($('#bhmpanel'+page.get('id')).fadeOut(300)).then(function() {
-                            return $('#bhmpanelheader'+page.get('id')).fadeOut(300);
-                        }).then(function() {
-                            $('#bhmpanel'+page.get('id')).closest('.panel-default').remove();
-                            self.find('.panel-title a:first').click();
-                        })
-
-                    });
-                }
-                getElForHelp(model)
-                .fadeOut(300,function() {
-                    $(this).remove();
-                })
+                var help_pages = model.get('page_ids').split(',');
+                modelel.fadeOut(300,function() {
+                    modelel.remove();
+                    $.each(help_pages,function() {
+                        if (!panel.find('tbody tr').length) {
+                            page.delete();
+                            panel.fadeOut(300,function() {
+                                $(this).remove();
+                                self.find('.panel-title').children('a').click();
+                            })
+                        }
+                    })
+                });
             });
 
         }).on('click','.addHelper',function() {
             var page = getPageFor($(this));
             var model = new BHM.helper({
-                id: BHM.ch.next('id').toString()
+                id: BHM.ch.next('id').toString(),
+                "page_ids": page.get('id')
             });
             BHM.ch.add(model);
             BHM.renderHelp( model );
@@ -490,7 +490,6 @@ var BHM = (function(Vertebrate, $, my) {
         }).on('click','.editHelp',function() {
             var model = getHelpFor($(this));
             var modal = $('#bhmEditHtmlModal');
-            $('#bhmEditHtmlModalFilename').text(model.get('filename'));
             $('#bhmEditHtmlModalFieldselecter').text(model.get('field_selecter'));
             CKEDITOR.instances['bhmTextareaEditor'].setData(model.get('html'));
             modal.data('helpId',model.get('id'));
