@@ -44,3 +44,5 @@ Temporary Items
 mysql-creds.php
 node_modules
 npm-debug.log
+data
+.config.js

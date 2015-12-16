@@ -33,7 +33,10 @@ module.exports = function(grunt) {
         },
         watch: {
             files: 'src/*',
-            tasks: ['concat','uglify']
+            tasks: ['concat','uglify'],
+            options: {
+                livereload: true
+            }
         }
     });
 

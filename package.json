@@ -20,8 +20,8 @@
   ],
   "author": "Michael A Smith @psalmody",
   "license": {
-      "type": "MIT License",
-      "url": "https://github.com/psalmody/bootstrap-help-manager/blob/master/mit-license.md"
+    "type": "MIT License",
+    "url": "https://github.com/psalmody/bootstrap-help-manager/blob/master/mit-license.md"
   },
   "bugs": {
     "url": "https://github.com/psalmody/Bootstrap-Help-Manager/issues"
@@ -32,5 +32,12 @@
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "^0.6.1"
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "mongodb": "^2.0.52",
+    "mongoose": "^4.3.1",
+    "node-jquery-deparam": "0.0.3",
+    "restify": "^4.0.3"
   }
 }

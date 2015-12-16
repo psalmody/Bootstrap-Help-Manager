@@ -1,5 +1,5 @@
 /**
-*  Vertebrate.js 0.3.0
+*  VertebrateJS v 0.3.2 by Michael Smith @psalmody
 *  https://github.com/psalmody/vertebratejs
 */
 var Vertebrate = (function($) {
@@ -25,7 +25,7 @@ var Vertebrate = (function($) {
                 this.changedattrs = [];
                 this.set = function(attr, value) {
                     this.attributes[attr] = value;
-                    this.changedattrs.push(attr);
+                    if (this.changedattrs.indexOf(attr) == -1) this.changedattrs.push(attr);
                     $([this]).trigger('vertebrate:changeattr', [this, this.attributes, this.changedattrs]);
                     $(document).trigger('vertebrate:changeattr', [this, this.attributes, this.changedattrs]);
                     return true;
@@ -66,6 +66,7 @@ var Vertebrate = (function($) {
                 url: typeof(this.url) == 'undefined' ? Vertebrate.get('url') : this.url,
                 method: 'POST',
                 data: {"model":this.get()},
+                dataType: 'JSON',
                 success: function(data, status, xhr) {
                     self.changedattrs = [];
                     if (typeof(callback) == 'function') callback.call(self,data, status, xhr);
@@ -77,6 +78,7 @@ var Vertebrate = (function($) {
             var promise = $.ajax({
                 url: typeof(this.url) == 'undefined' ? Vertebrate.get('url') : this.url,
                 method: 'GET',
+                dataType: 'JSON',
                 data: {"model":this.get()},
                 success: function(data, status, xhr) {
                     self.changedattrs = [];
@@ -91,6 +93,7 @@ var Vertebrate = (function($) {
                 url: typeof(this.url) == 'undefined' ? Vertebrate.get('url') : this.url,
                 method: 'DELETE',
                 data: {"model":this.get()},
+                dataType: 'JSON',
                 success: function(data, status, xhr) {
                     $([self]).trigger('vertebrate:deleted', [self, self.attributes, data, status, xhr]);
                     $(document).trigger('vertebrate:deleted', [self, self.attributes, data, status, xhr]);
@@ -150,6 +153,7 @@ var Vertebrate = (function($) {
                 url: typeof(this.url) == 'undefined' ? Vertebrate.get('url') : this.url,
                 method: 'POST',
                 data: postdata,
+                dataType: 'JSON',
                 success: function(data, status, xhr) {
                     self.removed = [];
                     if (typeof(callback) == 'function') callback.call(self, data, status, xhr);

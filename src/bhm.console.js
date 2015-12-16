@@ -69,8 +69,8 @@
             var modelel = getElForHelp(model);
             var panel = modelel.closest('.panel');
             BHM.ch.remove(model);
+            var help_pages = model.get('page_ids').split(',');
             $.when(model.delete()).done(function() {
-                var help_pages = model.get('page_ids').split(',');
                 modelel.fadeOut(300,function() {
                     modelel.remove();
                     $.each(help_pages,function() {
@@ -89,7 +89,7 @@
             var page = getPageFor($(this));
             var model = new BHM.helper({
                 id: BHM.ch.next('id').toString(),
-                "page_ids": page.get('id')
+                "page_ids": page.get('id').toString()
             });
             BHM.ch.add(model);
             BHM.renderHelp( model );
